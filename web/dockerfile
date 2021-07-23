@@ -1,0 +1,28 @@
+#Create an ubuntu base image with python 3 installed.
+FROM ubuntu:20.04
+
+#Install needed packages
+RUN set -xe \
+&& apt-get update -y \
+&& apt-get install -y python3-pip
+
+#Set the working directory
+WORKDIR /code
+
+# Copy requirements.txt first
+COPY requirements.txt .
+
+# Install all the dependencies
+RUN pip install -r requirements.txt
+
+#copy all the files
+COPY src/ .
+
+# Direct to Flask app
+ENV FLASK_APP=main.py
+
+#Expose the required port
+EXPOSE 5000
+
+#Run the command
+CMD ["flask", "run"]
