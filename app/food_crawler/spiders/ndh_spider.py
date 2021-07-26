@@ -1,15 +1,14 @@
 import scrapy
-import json
 from base64 import b64decode
 from datetime import date
 from scrapy_splash.request import SplashRequest
 
 # NOTE: Uses a flimsy method for relative paths and may break when using docker or
 # Google Cloud.
-with open('./food_crawler/lua_scripts/nav_to_dh_menu.lua', 'r') as openfile:
-    script_nav_to_dh_menu = openfile.read()
-with open('./food_crawler/lua_scripts/record_meal_elements.lua', 'r') as openfile:
-    script_record_meal_elements = openfile.read()
+with open('./food_crawler/lua_scripts/nav_to_dh_menu.lua', 'r') as f:
+    script_nav_to_dh_menu = f.read()
+with open('./food_crawler/lua_scripts/record_meal_elements.lua', 'r') as f:
+    script_record_meal_elements = f.read()
 
 class NDHSPIDER(scrapy.Spider):
     name = "ndh"
@@ -34,9 +33,9 @@ class NDHSPIDER(scrapy.Spider):
         # This extracts the current day's meals' CSS selectors for
         # the next extraction.
 
-        filename = 'result_meal.html'
-        visdebug_filename = 'log.png'
-        debug_img = b64decode(response.data['png'])
+        # filename = 'result_meal.html'
+        # visdebug_filename = 'log.png'
+        # debug_img = b64decode(response.data['png'])
         CURRENT_DATE = date.today().strftime('%A, %B %-d, %Y')
 
         # Find index for the current day
@@ -45,11 +44,11 @@ class NDHSPIDER(scrapy.Spider):
             if day == CURRENT_DATE:
                 self.log(f'Found the current day ({day}) at index {i}.')
                 break
-
-        with open(visdebug_filename, 'wb') as f:
-            f.write(debug_img)
-        self.log(f'Saved file {filename}')
-
+        self.log('Completed first parse.')
+        # with open(visdebug_filename, 'wb') as f:
+        #     f.write(debug_img)
+        # self.log(f'Saved file {filename}')
+        
         yield SplashRequest(
             url=self.url,
             callback=self.parse_meals,
@@ -68,7 +67,12 @@ class NDHSPIDER(scrapy.Spider):
         visdebug_filename = 'log_2.png'
         rb = response.data
         self.log(rb.keys())
+        with open('results.html', 'w') as f:
+            f.write(str(rb))
         # debug_img = b64decode(response.data['png'])
         # with open(visdebug_filename, 'wb') as f:
         #     f.write(debug_img)
-        self.log('Activated!')
+        self.log('Completed second parse.')
+
+        categories = response.xpath('//td[@class="cbo_nn_itemGroupRow"]/text()').extract()
+        self.log(f'Categories: {categories}')

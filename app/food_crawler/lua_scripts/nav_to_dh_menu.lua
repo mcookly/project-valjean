@@ -1,5 +1,6 @@
 -- Click button script
 function click_button(splash, sel)
+    splash.images_enabled = false -- This may be redundant
     btn = splash:select(sel)
     btn:mouse_click()
     assert(splash:wait(splash.args.wait))
@@ -13,8 +14,5 @@ function main(splash, args)
     -- Navigate to meal list menu through 2 button clicks
     click_button(splash, splash.args.dh)
     click_button(splash, splash.args.fwd_btn)
-    return {
-        html = splash:html(),
-        png = splash:png() -- For debug purposes only
-    }
+    return splash:html()
 end

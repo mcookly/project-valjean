@@ -1,5 +1,6 @@
 -- Click button script
 function click_button(splash, sel)
+    splash.images_enabled = false -- This may be redundant
     btn = splash:select(sel)
     btn:mouse_click()
     assert(splash:wait(splash.args.wait))
