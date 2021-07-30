@@ -1,0 +1,10 @@
+version: "0.1.0"
+services:
+    crawler:
+        build: .
+        ports:
+            - "5000:6023"
+    splash:
+        image: "scrapinghub/splash"
+        ports:
+            - "8050:8050"
