@@ -39,4 +39,4 @@ def handle_404(error):
 
 # Since this is the main script of the app, have it run itself.
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(debug=True)
