@@ -1,10 +1,13 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Maximilian Cook, Nicholas Clark">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon/favicon.ico') }}">
 
     <!-- Font Awesome -->
     <link
@@ -24,15 +27,15 @@
     <!-- Custom CSS -->
     <link href="../static/css/custom.css" rel="stylesheet" type="text/css">
     
-    <title>Project Valjean &centerdot; {{ page_title }}</title>
+    <title>Project Valjean &centerdot; {{ active_page }}</title>
   </head>
   <body>
-    <!-- Navbar -->
+    <!-- Header (will only link to index.html) -->
     <header>
         <nav class="navbar navbar-dark bg-secondary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="../static/images/logo_standard.svg" alt="" class="d-inline-block align-text-top">
+                <a class="navbar-brand mx-auto" href="{{ url_for('index') }}">
+                    <img src="../static/img/svg/pv-logo-inverted.svg" alt="" class="d-inline-block align-text-top" width="70" height="50">
                     Project Valjean</a>
             </div>
         </nav>
@@ -47,20 +50,20 @@
     
     </div>
 
-    <!-- Footer -->
+    <!-- Footer (navbar) -->
     <footer>
         <nav class="navbar fixed-bottom navbar-dark bg-secondary">
           <div class="mx-auto d-flex flex-column justify-content-center">
             <div class="container-fluid">
               <ul class="navbar nav">
                 <li class="nav-item">
-                  <a class="btn btn-outline-light btn-rounded mx-2" href="#">Rate</a>
+                  <a class="btn {% if active_page == 'Rate' %} btn-light {% else %} btn-outline-light {% endif %} btn-rounded mx-2" href="{{ url_for('rate') }}">Rate</a>
                 </li>
                 <li class="nav-item">
-                  <a class="btn btn-outline-light btn-rounded mx-2" href="#">Stats</a>
+                  <a class="btn {% if active_page == 'Stats' %} btn-light {% else %} btn-outline-light {% endif %} btn-rounded mx-2" href="{{ url_for('stats') }}">Stats</a>
                 </li>
                 <li class="nav-item">
-                  <a class="btn btn-outline-light btn-rounded mx-2" href="#">About</a>
+                  <a class="btn {% if active_page == 'About' %} btn-light {% else %} btn-outline-light {% endif %} btn-rounded mx-2" href="{{ url_for('about') }}">About</a>
                 </li>
               </ul>
             </div>
