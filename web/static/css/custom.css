@@ -1,0 +1,9 @@
+/* Custom CSS to override some Bootstrap styles */
+:root {
+    /* Used to set some variables (in case we want to adjust the color easily */
+    --main-bg-color: #800080
+}
+
+.btg-primary {
+    background-color: aquamarine;
+}
