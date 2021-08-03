@@ -1,0 +1,28 @@
+# NOTE:
+# This Dockerfile is based on this tutorial:
+# (https://www.docker.com/blog/containerized-python-development-part-1/).
+# Supposedly it will keep the final image smaller using multi-stage builds.
+
+# first stage
+FROM python:3.8 AS builder
+COPY requirements.txt .
+
+# install dependencies to the local user directory (eg. /root/.local)
+RUN pip install --user -r requirements.txt
+
+# second unnamed stage
+FROM ubuntu:
+WORKDIR /code
+
+# copy only the dependencies installation from the 1st stage image
+COPY --from=builder /root/.local /root/.local
+COPY ./src .
+
+# update PATH environment variable
+ENV FLASK_APP = main.py
+
+#Expose the required port
+EXPOSE 5000
+
+#Run the command
+CMD ["flask", "run"]

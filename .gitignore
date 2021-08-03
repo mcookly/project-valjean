@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,flask
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,flask
 
+### Custom folders ###
+test_scripts
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
