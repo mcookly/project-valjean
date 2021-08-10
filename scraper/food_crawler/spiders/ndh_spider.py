@@ -59,7 +59,7 @@ class NDHSPIDER(scrapy.Spider):
                 'dh': 'tr.cbo_nn_unitsAlternateRow:nth-child(2) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)',
                 'fwd_btn': '.cbo_nn_childUnitsCell > a:nth-child(1)',
                 })
-
+                
     def parse(self, response):
         # Parses data from NDH's day/meal selection menu.
         # This extracts the current day's meals' CSS selectors for
