@@ -25,9 +25,9 @@ except:
     logging.error('Could not find Lua script "record_meal_elements" in ' + SCRIPTS_DIR)
 logging.info('Found Lua script "record_meal_elements" in ' + SCRIPTS_DIR)
 
-class NDHSPIDER(scrapy.Spider):
+class SDHSPIDER(scrapy.Spider):
     ### __init__
-    name = "ndh"
+    name = "sdh"
     allowed_domains = ['nutrition.nd.edu']
     # Both NDH and SDH spiders will start from this URL.
     url = 'http://nutrition.nd.edu/NetNutrition/1'
@@ -35,7 +35,7 @@ class NDHSPIDER(scrapy.Spider):
     meals_list = tuple()
 
     # Page selectors
-    dining_hall_sel = 'tr.cbo_nn_unitsAlternateRow:nth-child(2) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)'
+    dining_hall_sel = 'tr.cbo_nn_unitsPrimaryRow:nth-child(5) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)'
     fwd_btn_sel = '.cbo_nn_childUnitsCell > a:nth-child(1)'
 
     def start_requests(self):
@@ -51,7 +51,7 @@ class NDHSPIDER(scrapy.Spider):
                 })
                 
     def parse(self, response):
-        # Parses data from NDH's day/meal selection menu.
+        # Parses data from SDH's day/meal selection menu.
         # This extracts the current day's meals' CSS selectors for
         # the next extraction.
 
@@ -80,7 +80,7 @@ class NDHSPIDER(scrapy.Spider):
             })
     
     def parse_meals(self, response):
-        # Parses the food items from each meal at NDH and organize
+        # Parses the food items from each meal at SDH and organize
         # into dicts for each meal.
 
         # Creates a dict: {key: meal, value: html from meal's webpage}
