@@ -9,6 +9,7 @@ from scrapy_splash.request import SplashRequest
 CUR_DIR = os.path.abspath('food_crawler')
 SCRIPTS_DIR = os.path.join(CUR_DIR, 'scripts')
 
+### Load 'nav_to_dh_menu.lua'
 try:
     with open(os.path.join(SCRIPTS_DIR, 'nav_to_dh_menu.lua'), 'r') as f:
         script_nav_to_dh_menu = f.read()
@@ -16,6 +17,7 @@ except:
     logging.error('Could not find Lua script "nav_to_dh_menu" in ' + SCRIPTS_DIR)
 logging.info('Found Lua script "nav_to_dh_menu" in ' + SCRIPTS_DIR)
 
+### Load 'record_meal_elements.lua'
 try:
     with open(os.path.join(SCRIPTS_DIR, 'record_meal_elements.lua'), 'r') as f:
         script_record_meal_elements = f.read()
@@ -24,13 +26,13 @@ except:
 logging.info('Found Lua script "record_meal_elements" in ' + SCRIPTS_DIR)
 
 class NDHSPIDER(scrapy.Spider):
+    ### __init__
     name = "ndh"
     allowed_domains = ['nutrition.nd.edu']
     # Both NDH and SDH spiders will start from this URL.
     url = 'http://nutrition.nd.edu/NetNutrition/1'
     current_day = date.today().strftime('%A, %B %-d, %Y')
-
-    is_weekend = False if date.today().weekday() < 5 else True
+    meals_list = tuple()
 
     def start_requests(self):
         yield SplashRequest(
@@ -55,6 +57,10 @@ class NDHSPIDER(scrapy.Spider):
             if day == self.current_day:
                 logging.info(f'Found the current day ({day}) at node index {i}.')
                 break
+        # Get list of meals for the day
+        # '//a' is cycling through all child nodes under the current day node.
+        self.meals_list = response.xpath('//*[@id="MenuList"]/div[2]/table/tbody/tr[1]/td/table/tbody/tr[2]/td/table/tbody/tr//a/text()').extract()
+        logging.info(f'Found {len(self.meals_list)} meal(s): {self.meals_list}')
         logging.info(' --- Completed first parse --- ')
         yield SplashRequest(
             url=self.url,
@@ -66,7 +72,7 @@ class NDHSPIDER(scrapy.Spider):
                 'dh': 'tr.cbo_nn_unitsAlternateRow:nth-child(2) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)',
                 'fwd_btn': '.cbo_nn_childUnitsCell > a:nth-child(1)',
                 'index': i,
-                'weekend': self.is_weekend
+                'meals': self.meals_list
             })
     
     def parse_meals(self, response):
@@ -78,17 +84,15 @@ class NDHSPIDER(scrapy.Spider):
         # This tag *might* work for SDH as well.
         xpath_tag = '//table[@class="cbo_nn_itemGridTable"]/tbody/tr//td'
 
-        # NOTE: Perhaps there is a more efficient way of categorizing
-        # the parses. Would a numerical system work more smoothly?
-        if self.is_weekend:
-            meal_brunch = parse_tools.extract_foods_dict(response_per_meal['brunch'], xpath_tag)
-        else:
-            meal_breakfast = parse_tools.extract_foods_dict(response_per_meal['breakfast'], xpath_tag)
-            meal_lunch = parse_tools.extract_foods_dict(response_per_meal['lunch'], xpath_tag)
-        meal_dinner = parse_tools.extract_foods_dict(response_per_meal['dinner'], xpath_tag)
+        # Extract meal contents
+        for meal in self.meals_list:
+            logging.debug(f'### {meal} ###')
+            parse_tools.extract_foods_dict(response_per_meal[meal], xpath_tag)
 
         logging.info(' --- Completed second parse --- ')
         # -------- @ Nick take over from here. ---------
         # Add SQL code to the file 'communicator.py' in foodhandler
-        # under write_to_db.
+        # under write_to_db. We could actually just communicate straight to 
+        # the db in the for loop above.
+
         # communicator.write_to_db()  
