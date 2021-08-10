@@ -22,14 +22,7 @@ function main(splash, args)
     click_button(splash, splash.args.fwd_btn)
     -- Click through and extract a snapshot of each meal's offerings
     local results = {}
-    local meals = {}
-    if splash.args.weekend == "True" then
-        meals = {'brunch', 'dinner'}
-    else
-        meals = {'breakfast', 'lunch', 'dinner'}
-    end
-
-    for meal_index, meal in ipairs(meals) do
+    for meal_index, meal in ipairs(splash.args.meals) do
         results[meal] = scan_meal(splash, splash.args.index, meal_index)
         click_button(splash, '#btn_Back1')
     end
