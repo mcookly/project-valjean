@@ -1,37 +1,8 @@
 import logging
 import scrapy
 from datetime import date
-from foodhandler import parse_tools
+from foodhandler import parse_tools, communicator
 from scrapy_splash.request import SplashRequest
-from scrapy.selector import Selector
-
-def extract_food_cat(html_text):
-    """
-    Input: html text
-    Output: dict with keys as categories and values as lists of foods
-    """
-    html = Selector(text=html_text) # Creates a selector object for Xpath parsing.
-    # NOTE @Nick: feel free to change this data format to whatever works best.
-    foods_per_category = dict()
-    # Nodes of interest are all td
-    td_nodes = html.xpath('//table[@class="cbo_nn_itemGridTable"]/tbody/tr//td')
-
-    for node in td_nodes:
-        # Using extract_first() to avoid a list return
-        node_class = node.xpath('./@class').extract_first()
-        if node_class == 'cbo_nn_itemGroupRow':
-            # Found a category
-            category = node.xpath('./text()').extract_first()
-            foods_per_category[category] = list()
-            logging.debug(f'Found category: {category}')
-        elif node_class == 'cbo_nn_itemHover':
-            # Found a food item under a category
-            food_item = node.xpath('./text()').extract_first()
-            foods_per_category[category].append(food_item)
-            logging.debug(f'    Found food item: {food_item}')
-    
-    return foods_per_category
-
 
 # NOTE: Uses a flimsy method for relative paths and may break when using docker or
 # Google Cloud.
@@ -73,7 +44,6 @@ class NDHSPIDER(scrapy.Spider):
                 self.log(f'Found the current day ({day}) at node index {i}.')
                 break
         self.log(' --- Completed first parse. --- ')
-        parse_tools.extract_foods_dict('hi', 'yes')
         yield SplashRequest(
             url=self.url,
             callback=self.parse_meals,
@@ -93,16 +63,20 @@ class NDHSPIDER(scrapy.Spider):
 
         # Creates a dict: {key: meal, value: html from meal's webpage}
         response_per_meal = response.data
+        # This tag *might* work for SDH as well.
+        xpath_tag = '//table[@class="cbo_nn_itemGridTable"]/tbody/tr//td'
 
         # NOTE: Perhaps there is a more efficient way of categorizing
         # the parses. Would a numerical system work more smoothly?
         if self.is_weekend:
-            meal_brunch = extract_food_cat(response_per_meal['brunch'])
+            meal_brunch = parse_tools.extract_foods_dict(response_per_meal['brunch'], xpath_tag)
         else:
-            meal_breakfast = extract_food_cat(response_per_meal['breakfast'])
-            meal_lunch = extract_food_cat(response_per_meal['lunch'])
-        meal_dinner = extract_food_cat(response_per_meal['dinner'])
-
-        # -------- @ Nick take over from here. ---------
+            meal_breakfast = parse_tools.extract_foods_dict(response_per_meal['breakfast'], xpath_tag)
+            meal_lunch = parse_tools.extract_foods_dict(response_per_meal['lunch'], xpath_tag)
+        meal_dinner = parse_tools.extract_foods_dict(response_per_meal['dinner'], xpath_tag)
 
         self.log(' --- Completed second parse. --- ')
+        # -------- @ Nick take over from here. ---------
+        # Add SQL code to the file 'communicator.py' in foodhandler
+        # under write_to_db.
+        # communicator.write_to_db()
