@@ -6,24 +6,24 @@ from foodhandler import parse_tools, communicator
 from scrapy_splash.request import SplashRequest
 
 ### Load Lua scripts ###
-CUR_DIR = os.path.abspath('food_crawler')
-SCRIPTS_DIR = os.path.join(CUR_DIR, 'scripts')
+CUR_DIR = os.getcwd()
+SCRIPTS_DIR = os.path.join(CUR_DIR, 'food_crawler/scripts')
 
 ### Load 'nav_to_dh_menu.lua'
 try:
     with open(os.path.join(SCRIPTS_DIR, 'nav_to_dh_menu.lua'), 'r') as f:
         script_nav_to_dh_menu = f.read()
+    logging.info('Found Lua script "nav_to_dh_menu" in ' + SCRIPTS_DIR)
 except:
     logging.error('Could not find Lua script "nav_to_dh_menu" in ' + SCRIPTS_DIR)
-logging.info('Found Lua script "nav_to_dh_menu" in ' + SCRIPTS_DIR)
 
 ### Load 'record_meal_elements.lua'
 try:
     with open(os.path.join(SCRIPTS_DIR, 'record_meal_elements.lua'), 'r') as f:
         script_record_meal_elements = f.read()
+    logging.info('Found Lua script "record_meal_elements" in ' + SCRIPTS_DIR)
 except:
     logging.error('Could not find Lua script "record_meal_elements" in ' + SCRIPTS_DIR)
-logging.info('Found Lua script "record_meal_elements" in ' + SCRIPTS_DIR)
 
 class SDHSPIDER(scrapy.Spider):
     ### __init__
@@ -90,7 +90,7 @@ class SDHSPIDER(scrapy.Spider):
 
         # Extract meal contents
         for meal in self.meals_list:
-            logging.debug(f'### {meal} ###')
+            logging.debug(f'### {meal}')
             parse_tools.extract_foods_dict(response_per_meal[meal], xpath_tag)
 
         logging.info(' --- Completed second parse --- ')
