@@ -13,6 +13,7 @@ SPIDER_MODULES = ['food_crawler.spiders']
 NEWSPIDER_MODULE = 'food_crawler.spiders'
 
 # Splash integration
+# Change to "splash" for build and "localhost" for focused debugging.
 SPLASH_URL = 'http://splash:8050'
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
