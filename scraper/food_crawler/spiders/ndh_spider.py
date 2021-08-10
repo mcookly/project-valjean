@@ -1,6 +1,7 @@
-import scrapy
 import logging
+import scrapy
 from datetime import date
+from foodhandler import parse_tools
 from scrapy_splash.request import SplashRequest
 from scrapy.selector import Selector
 
@@ -72,7 +73,7 @@ class NDHSPIDER(scrapy.Spider):
                 self.log(f'Found the current day ({day}) at node index {i}.')
                 break
         self.log(' --- Completed first parse. --- ')
-        
+        parse_tools.extract_foods_dict('hi', 'yes')
         yield SplashRequest(
             url=self.url,
             callback=self.parse_meals,
