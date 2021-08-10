@@ -1,15 +1,27 @@
+import os
 import logging
 import scrapy
 from datetime import date
 from foodhandler import parse_tools, communicator
 from scrapy_splash.request import SplashRequest
 
-# NOTE: Uses a flimsy method for relative paths and may break when using docker or
-# Google Cloud.
-with open('./food_crawler/scripts/nav_to_dh_menu.lua', 'r') as f:
-    script_nav_to_dh_menu = f.read()
-with open('./food_crawler/scripts/record_meal_elements.lua', 'r') as f:
-    script_record_meal_elements = f.read()
+### Load Lua scripts ###
+CUR_DIR = os.path.abspath('food_crawler')
+SCRIPTS_DIR = os.path.join(CUR_DIR, 'scripts')
+
+try:
+    with open(os.path.join(SCRIPTS_DIR, 'nav_to_dh_menu.lua'), 'r') as f:
+        script_nav_to_dh_menu = f.read()
+except:
+    logging.error('Could not find Lua script "nav_to_dh_menu" in ' + SCRIPTS_DIR)
+logging.info('Found Lua script "nav_to_dh_menu" in ' + SCRIPTS_DIR)
+
+try:
+    with open(os.path.join(SCRIPTS_DIR, 'record_meal_elements.lua'), 'r') as f:
+        script_record_meal_elements = f.read()
+except:
+    logging.error('Could not find Lua script "record_meal_elements" in ' + SCRIPTS_DIR)
+logging.info('Found Lua script "record_meal_elements" in ' + SCRIPTS_DIR)
 
 class NDHSPIDER(scrapy.Spider):
     name = "ndh"
@@ -41,9 +53,9 @@ class NDHSPIDER(scrapy.Spider):
         for i in range(1, 8):
             day = response.css(f'div.cbo_nn_menuTableDiv tr:nth-child({i}) td.cbo_nn_menuCell td::text').get()
             if day == self.current_day:
-                self.log(f'Found the current day ({day}) at node index {i}.')
+                logging.info(f'Found the current day ({day}) at node index {i}.')
                 break
-        self.log(' --- Completed first parse. --- ')
+        logging.info(' --- Completed first parse --- ')
         yield SplashRequest(
             url=self.url,
             callback=self.parse_meals,
@@ -75,8 +87,8 @@ class NDHSPIDER(scrapy.Spider):
             meal_lunch = parse_tools.extract_foods_dict(response_per_meal['lunch'], xpath_tag)
         meal_dinner = parse_tools.extract_foods_dict(response_per_meal['dinner'], xpath_tag)
 
-        self.log(' --- Completed second parse. --- ')
+        logging.info(' --- Completed second parse --- ')
         # -------- @ Nick take over from here. ---------
         # Add SQL code to the file 'communicator.py' in foodhandler
         # under write_to_db.
-        # communicator.write_to_db()
+        # communicator.write_to_db()  
