@@ -1,0 +1,13 @@
+/* HOME (index.html) */
+.full-vertical {
+    height: 100vh;
+}
+#home-button {
+    margin-top: 10px;
+}
+
+#home-logo {
+    width: 20%;
+    height: auto;
+    min-width: 110px;
+}
