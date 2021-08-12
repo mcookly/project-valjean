@@ -12,13 +12,13 @@ def index():
 
 ########### Rate
 @app.route('/rate/dh/')
-def rate():
+def dininghall():
     return render_template('rate/dininghall.html')
 @app.route('/rate/select/')
-def rate():
+def select():
     return render_template('rate/select.html')
 @app.route('/rate/rating/')
-def rate():
+def rating():
     return render_template('rate/rating.html')
 
 ########### Stats
