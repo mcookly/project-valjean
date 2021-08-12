@@ -1,9 +1,13 @@
 import os
-from flask import Flask, send_from_directory, render_template, redirect
+from flask import Flask, send_from_directory, render_template, redirect, session
 from flask.helpers import url_for
+from werkzeug.exceptions import MethodNotAllowed
 
 # This line initiates the Flask app
 app = Flask(__name__)
+
+# Session
+app.secret_key = 'potato beans'
 
 ########### Index
 @app.route('/')
@@ -13,6 +17,8 @@ def index():
 ########### Rate
 @app.route('/rate/dh/')
 def dininghall():
+    if 'sdh' in session or 'ndh' in session:
+        return redirect(url_for('select'))
     return render_template('rate/dininghall.html')
 @app.route('/rate/select/')
 def select():
@@ -20,6 +26,17 @@ def select():
 @app.route('/rate/rating/')
 def rating():
     return render_template('rate/rating.html')
+
+########### Session handler for dining hall selection
+@app.route('/session/ndh/', methods = ['GET', 'POST'])
+def session_ndh():
+    session['dininghall'] = 'ndh'
+    return redirect(url_for('select'))
+
+@app.route('/session/sdh/', methods = ['GET', 'POST'])
+def session_sdh():
+    session['dininghall'] = 'sdh'
+    return redirect(url_for('select'))
 
 ########### Stats
 @app.route('/stats/')

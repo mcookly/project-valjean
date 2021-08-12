@@ -1,4 +1,9 @@
 {% extends "base.html" %}
 {% set active_page = "Rate" %}
 {% block content %}
+<h1>{{ session['dininghall'] }}</h1>
+<form>
+    {% block start %}
+    {% endblock %}
+</form>
 {% endblock %}
