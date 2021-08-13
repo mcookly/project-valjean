@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 {% set active_page = "Rate" %}
 {% block content %}
-<h1>{{ session['dininghall'] }}</h1>
 <form>
-    {% block start %}
-    {% endblock %}
+    {% include "components/form-header.html" %}
+    {% for cat in food_items.keys() %}
+        <label for="{{ cat }}Cat">{{ cat }}</label>
+        {% for food_item in food_items[cat] %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="check{{ food_item }}">
+                <label class="form-check-label" for="{{ food_item }}Check">{{ food_item }}</label>
+            </div>
+        {% endfor %} 
+    {% endfor %}
 </form>
 {% endblock %}

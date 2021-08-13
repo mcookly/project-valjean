@@ -6,37 +6,36 @@ from werkzeug.exceptions import MethodNotAllowed
 # This line initiates the Flask app
 app = Flask(__name__)
 
-# Session
-app.secret_key = 'potato beans'
-
 ########### Index
 @app.route('/')
 def index():
     return render_template('index.html')
 
-########### Rate
-@app.route('/rate/dh/')
+########### Rate page group
+@app.route('/rate/dh/') # Select the DH
 def dininghall():
-    if 'sdh' in session or 'ndh' in session:
-        return redirect(url_for('select'))
     return render_template('rate/dininghall.html')
-@app.route('/rate/select/')
-def select():
-    return render_template('rate/select.html')
+@app.route('/rate/<dh>/meal/') # Select the meal
+def meal(dh = None):
+    meals = ['Brunch', 'Dinner'] # TODO: replace with SQL data
+    return render_template('rate/meal.html', dh=dh, meals=meals)
+@app.route('/rate/<dh>/<meal>/select/')
+def select(dh, meal):
+    food = {'Beans': ['apple', 'pear', 'salmon'], 'Juice': ['cider', 'banana', 'tuna']} # TODO: replace with SQL data
+    return render_template('rate/select.html', dh=dh, meal=meal, food_items = food)
 @app.route('/rate/rating/')
 def rating():
     return render_template('rate/rating.html')
 
-########### Session handler for dining hall selection
-@app.route('/session/ndh/', methods = ['GET', 'POST'])
-def session_ndh():
-    session['dininghall'] = 'ndh'
-    return redirect(url_for('select'))
+########### Selector for dining hall selection
+@app.route('/session/dh/<dh>/')
+def selector_dh(dh):
+    return redirect(url_for('meal', dh=dh))
 
-@app.route('/session/sdh/', methods = ['GET', 'POST'])
-def session_sdh():
-    session['dininghall'] = 'sdh'
-    return redirect(url_for('select'))
+########### Selector for meal selection
+@app.route('/session/meal/<dh>/<meal>')
+def selector_meal(dh, meal):
+    return redirect(url_for('select', dh=dh, meal=meal))
 
 ########### Stats
 @app.route('/stats/')
