@@ -1,15 +1,16 @@
 {% extends "rate-base.html" %}
 {% set active_page = "Rate" %}
 {% block content %}
-<form>
+<form class="me-auto" style="max-width: 100%;">
     {% for cat in food_items.keys() %}
-        <label for="{{ cat }}Cat">{{ cat }}</label>
-        {% for food_item in food_items[cat] %}
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="check{{ food_item }}">
-                <label class="form-check-label" for="check{{ food_item }}">{{ food_item }}</label>
-            </div>
-        {% endfor %} 
+    <label for="{{ cat }}Cat">{{ cat }}</label>
+    {% for food_item in food_items[cat] %}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="check{{ food_item }}">
+            <label class="form-check-label" for="check{{ food_item }}">{{ food_item }}</label>
+        </div>
+    {% endfor %} 
     {% endfor %}
+    <a class="btn btn-form btn-block btn-secondary btn-rounded" href="{{ url_for('rating') }}">Rate</a>
 </form>
 {% endblock %}

@@ -17,3 +17,6 @@
     background-color: var(--mdb-secondary);
     border-color: var(--mdb-secondary);
 }
+.btn-form {
+    margin-top: 10px;
+}
