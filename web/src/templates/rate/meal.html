@@ -1,13 +1,9 @@
-{% extends "base.html" %}
+{% extends "rate-base.html" %}
 {% set active_page = "Rate" %}
 {% block content %}
-<div class="d-flex flex-column full-vertical justify-content-center align-items-center pb-20">
-    <h2>{{ dh }} Dining Hall</h2>
-    <h3>Choose your meal</h3>
-    <div class="col-md-5 text-justify mx-5">
-        {% for meal in meals %}
-        <a id="home-button" class="btn btn-block btn-lg btn-secondary btn-rounded" href="{{ url_for('select', dh=dh, meal=meal) }}">{{ meal }}</a>
-        {% endfor %}
-    </div>
+<div class="col-10 col-md-5 text-justify">
+    {% for meal in meals %}
+    <a id="home-button" class="btn btn-block btn-lg btn-secondary btn-rounded" href="{{ url_for('select', dh=dh, meal=meal) }}">{{ meal }}</a>
+    {% endfor %}
 </div>
 {% endblock %}

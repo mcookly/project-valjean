@@ -10,12 +10,20 @@
     {% endblock header %}
 
     <!-- All page-specific content should go in here -->
-    <div id="rate-container" class="container">
+    <div class="container">
+        <div id="rate-form" class="shadow d-flex flex-column full-vertical justify-content-center align-items-center pb-20">
+            {% if dh %}
+                {% if meal %}
+                <h2>{{ dh }} - {{ meal }}</h2>
+                {% else %}
+                <h2>{{ dh }}</h2>  
+                {% endif %}
+            {% endif %}
     
-        <!-- Jinja directives: page contents will go between them -->
-        {% block content %}
-        {% endblock %}
-    
+            <!-- Jinja directives: page contents will go between them -->
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
 
     <!-- Footer (navbar) -->
