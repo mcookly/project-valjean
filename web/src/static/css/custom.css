@@ -1,6 +1,19 @@
+/* Stylizes rate-base.html */
 #rate-form {
-    /* background-color: #efefef; */
     border-radius: 10px;
     margin-top: 25px;
     padding: 25px;
+}
+/* Color the checkboxes */
+.form-check-input[type=checkbox]:checked {
+    background-color: var(--mdb-secondary);
+    border-color: var(--mdb-secondary);
+}
+.form-check-input[type=checkbox]:checked:active {
+    background-color: var(--mdb-secondary);
+    border-color: var(--mdb-secondary);
+}
+.form-check-input[type=checkbox]:checked:focus {
+    background-color: var(--mdb-secondary);
+    border-color: var(--mdb-secondary);
 }
