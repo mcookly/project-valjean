@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% block head %}
+    {% include "components/head.html" %}
+  {% endblock head %}
+  <body>
+    <!-- Header (will only link to index.html) -->
+    {% block header %}
+      {% include "components/header.html" %}
+    {% endblock header %}
+
+    <!-- All page-specific content should go in here -->
+    <div id="rate-container" class="container">
+    
+        <!-- Jinja directives: page contents will go between them -->
+        {% block content %}
+        {% endblock %}
+    
+    </div>
+
+    <!-- Footer (navbar) -->
+    {% block navbar %}
+      {% include 'components/navbar.html' %}
+    {% endblock navbar %}
+
+    <!-- MDB -->
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
+    ></script>
+  </body>
+</html>

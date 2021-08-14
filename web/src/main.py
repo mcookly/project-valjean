@@ -12,6 +12,9 @@ def index():
     return render_template('index.html')
 
 ########### Rate page group
+@app.route('/rate/') # Redirect for simpler navigation to the rating section.
+def rate():
+    return redirect(url_for('dininghall'))
 @app.route('/rate/dh/') # Select the DH
 def dininghall():
     return render_template('rate/dininghall.html')
