@@ -1,6 +1,7 @@
 import os
-from flask import Flask, send_from_directory, render_template, request, redirect, session
+from flask import Flask, send_from_directory, render_template, request, redirect, json
 from flask.helpers import url_for
+
 
 # This line initiates the Flask app
 app = Flask(__name__)
@@ -25,9 +26,10 @@ def meal(dh = None):
 def select(dh, meal):
     food = {'Beans': ['apple', 'pear', 'salmon'], 'Juice': ['cider', 'banana', 'tuna']} # TODO: replace with SQL data
     return render_template('rate/select.html', dh=dh, meal=meal, food_items = food)
-@app.route('/rate/rating/')
-def rating():
-    return render_template('rate/rating.html')
+@app.route('/rate/rating/<dh>/<meal>/<food>')
+def rating(dh, meal, food):
+    food_dict = json.loads(food)
+    return render_template('rate/rating.html', dh=dh, meal=meal, food=food_dict)
 
 ########### Selector for dining hall selection
 @app.route('/session/dh/<dh>/')
@@ -42,8 +44,9 @@ def selector_meal(dh, meal):
 ########### Stores selected food items
 @app.route('/session/<dh>/<meal>/food-items', methods=['POST'])
 def record_food_items(dh, meal):
-    req = request.form.to_dict()
-    return redirect(url_for('rating', dh=dh, meal=meal))
+    food = request.form.to_dict(flat=False) # Gives food items per category
+    food_str = json.dumps(food)
+    return redirect(url_for('rating', dh=dh, meal=meal, food=food_str))
 
 ########### Stats
 @app.route('/stats/')
