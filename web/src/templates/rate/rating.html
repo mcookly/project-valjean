@@ -1,7 +1,7 @@
 {% extends "rate-base.html" %}
 {% set active_page = "Rate" %}
 {% block content %}
-<form class="text-center">
+<form action="{{ url_for('submit_ratings', dh=dh, meal=meal) }}" class="text-center" method="POST">
     {% for cat in food.keys() %}
     <legend for="{{ cat }}Cat">{{ cat }}</legend>
     {% for food_item in food[cat] %}

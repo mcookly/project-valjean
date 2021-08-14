@@ -30,6 +30,9 @@ def select(dh, meal):
 def rating(dh, meal, food):
     food_dict = json.loads(food)
     return render_template('rate/rating.html', dh=dh, meal=meal, food=food_dict)
+@app.route('/rate/submitted')
+def submitted():
+    return render_template('rate/submitted.html')
 
 ########### Selector for dining hall selection
 @app.route('/session/dh/<dh>/')
@@ -47,6 +50,12 @@ def record_food_items(dh, meal):
     food = request.form.to_dict(flat=False) # Gives food items per category
     food_str = json.dumps(food)
     return redirect(url_for('rating', dh=dh, meal=meal, food=food_str))
+
+########### Writes ratings to DB
+@app.route('/session/<dh>/<meal>/submit', methods=['POST'])
+def submit_ratings(dh, meal):
+    # Code for writing to DB goes here.
+    return redirect(url_for('submitted'))
 
 ########### Stats
 @app.route('/stats/')
