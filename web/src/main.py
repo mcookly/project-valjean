@@ -1,7 +1,6 @@
 import os
-from flask import Flask, send_from_directory, render_template, redirect, session
+from flask import Flask, send_from_directory, render_template, request, redirect, session
 from flask.helpers import url_for
-from werkzeug.exceptions import MethodNotAllowed
 
 # This line initiates the Flask app
 app = Flask(__name__)
@@ -36,9 +35,15 @@ def selector_dh(dh):
     return redirect(url_for('meal', dh=dh))
 
 ########### Selector for meal selection
-@app.route('/session/meal/<dh>/<meal>')
+@app.route('/session/<dh>/<meal>')
 def selector_meal(dh, meal):
     return redirect(url_for('select', dh=dh, meal=meal))
+
+########### Stores selected food items
+@app.route('/session/<dh>/<meal>/food-items', methods=['POST'])
+def record_food_items(dh, meal):
+    req = request.form.to_dict()
+    return redirect(url_for('rating', dh=dh, meal=meal))
 
 ########### Stats
 @app.route('/stats/')
