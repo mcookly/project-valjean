@@ -10,12 +10,10 @@
     </div>
     <div class="row">
         {% for i in range(1,6) %}
-        <div class="col">
-            <div class="form-check">
-                <!-- name = dict key, value = dict value -->
-                <input class="form-check-input" type="radio" value="{{ i }}" id="{{ cat }}-{{ food_item }}" name="{{ food_item }}">   
-            </div>
-        </div>
+        <label class="btn btn-secondary btn-rounded" for="{{ cat }}-{{ food_item }}">   
+            <input class="btn-check" type="radio" value="{{ i }}" id="{{ cat }}-{{ food_item }}" name="{{ food_item }}" autocomplete="off"/>
+            {{ i }}
+        </label>
         {% endfor %}
     </div>
     {% endfor %}

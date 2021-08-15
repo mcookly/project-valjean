@@ -20,3 +20,20 @@
 .btn-form {
     margin-top: 10px;
 }
+/* Color the radio buttons */
+/* .form-check-input[type=radio]:checked {
+    background-color: var(--mdb-secondary);
+    border-color: var(--mdb-secondary);
+}
+.form-check-input[type=radio]:checked:active {
+    background-color: var(--mdb-secondary);
+    border-color: var(--mdb-secondary);
+}
+.form-check-input[type=radio]:checked:focus {
+    background-color: var(--mdb-secondary);
+    border-color: var(--mdb-secondary);
+}
+.form-check-input[type=radio]:checked:after {
+    background-color: var(--mdb-secondary);
+    border-color: var(--mdb-secondary);
+} */
