@@ -21,19 +21,13 @@
     margin-top: 10px;
 }
 /* Color the radio buttons */
-/* .form-check-input[type=radio]:checked {
-    background-color: var(--mdb-secondary);
-    border-color: var(--mdb-secondary);
+.btn-rate {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 24px;
+    border-radius: 50%;
+    margin-left: 5px;
+    margin-right: 5px;
 }
-.form-check-input[type=radio]:checked:active {
-    background-color: var(--mdb-secondary);
-    border-color: var(--mdb-secondary);
-}
-.form-check-input[type=radio]:checked:focus {
-    background-color: var(--mdb-secondary);
-    border-color: var(--mdb-secondary);
-}
-.form-check-input[type=radio]:checked:after {
-    background-color: var(--mdb-secondary);
-    border-color: var(--mdb-secondary);
-} */

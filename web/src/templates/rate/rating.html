@@ -10,7 +10,7 @@
     </div>
     <div class="row">
         {% for i in range(1,6) %}
-        <label class="btn btn-secondary btn-rounded" for="{{ cat }}-{{ food_item }}">   
+        <label class="btn btn-rate btn-secondary" for="{{ cat }}-{{ food_item }}">   
             <input class="btn-check" type="radio" value="{{ i }}" id="{{ cat }}-{{ food_item }}" name="{{ food_item }}" autocomplete="off"/>
             {{ i }}
         </label>
