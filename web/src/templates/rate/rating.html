@@ -1,6 +1,26 @@
 {% extends "rate-base.html" %}
 {% set active_page = "Rate" %}
 {% block content %}
+<script>
+    $(document).ready(function() {
+        $(".btn-check").click(function(e) {
+            var value = this.value;
+            var name = this.name;
+            console.log("Clicked " + this.id); // debug
+            for (let i=1; i<7; i++) {
+                var btn = "#label-" + name + "-" + i;
+                if (i === parseInt(value)) {
+                    // Using toggleClass for simplicity.
+                    $(btn).toggleClass("btn-outline-secondary btn-secondary");
+                } else {
+                    // This requires a manual add-remove.
+                    $(btn).removeClass("btn-secondary");
+                    $(btn).addClass("btn-outline-secondary");
+                }
+            }
+        });
+    });
+</script>
 <form action="{{ url_for('submit_ratings', dh=dh, meal=meal) }}" class="text-center" method="POST">
     {% for cat in food.keys() %}
     <legend for="{{ cat }}Cat">{{ cat }}</legend>
@@ -10,10 +30,9 @@
     </div>
     <div class="row">
         {% for i in range(1,6) %}
-        <label class="btn btn-rate btn-secondary" for="{{ cat }}-{{ food_item }}">   
-            <input class="btn-check" type="radio" value="{{ i }}" id="{{ cat }}-{{ food_item }}" name="{{ food_item }}" autocomplete="off"/>
-            {{ i }}
-        </label>
+        <!-- name = dict key, value = dict value -->
+        <input class="btn-check" type="radio" value="{{ i }}" id="{{ cat }}-{{ food_item }}-{{ i }}" name="{{cat}}-{{ food_item }}" autocomplete="off">
+        <label id="label-{{ cat }}-{{ food_item }}-{{ i }}" class="btn btn-rate btn-outline-secondary" for="{{ cat }}-{{ food_item }}-{{ i }}">{{ i }}</label>
         {% endfor %}
     </div>
     {% endfor %}
