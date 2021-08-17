@@ -3,7 +3,7 @@
 {% block content %}
 <div class="col-10 col-md-5 text-justify">
     {% for meal in meals %}
-    <a id="home-button" class="btn btn-block btn-lg btn-secondary btn-rounded" href="{{ url_for('select', dh=dh, meal=meal) }}">{{ meal }}</a>
+    <a id="home-button-{{ meal }}" class="btn btn-block btn-lg btn-secondary btn-rounded" href="{{ url_for('select', dh=dh, meal=meal) }}">{{ meal }}</a>
     {% endfor %}
 </div>
 {% endblock %}
