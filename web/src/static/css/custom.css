@@ -5,6 +5,7 @@
     width: 20%;
     height: auto;
     min-width: 110px;
+}
 /* Stretch body to full viewport */
 .full-vertical {
     height: 100vh;
