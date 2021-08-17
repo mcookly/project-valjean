@@ -1,16 +1,20 @@
 {% extends "rate-base.html" %}
 {% set active_page = "Rate" %}
 {% block content %}
-<form action="{{ url_for('record_food_items', dh=dh, meal=meal) }}" method="POST" class="me-auto">
+<form action="{{ url_for('record_food_items', dh=dh, meal=meal) }}" style="width: 100%;" method="POST">
     {% for cat in food_items.keys() %}
-    <legend class="big-legend" for="{{ cat }}Cat">{{ cat }}</legend>
-    {% for food_item in food_items[cat] %}
-        <div class="form-check">
-            <!-- name = dict key, value = dict value -->
-            <input class="form-check-input" type="checkbox" value="{{ food_item }}" id="{{ cat }}-{{ food_item }}" name="{{ cat }}">
-            <label class="form-check-label" for="{{ cat }}-{{ food_item }}">{{ food_item }}</label>
+        <div class="flex-row rate-form shadow">
+            <legend class="big-legend" for="{{ cat }}Cat">{{ cat }}</legend>
+            <div class="form-padding">
+                {% for food_item in food_items[cat] %}
+                <div class="form-check">
+                    <!-- name = dict key, value = dict value -->
+                    <input class="form-check-input" type="checkbox" value="{{ food_item }}" id="{{ cat }}-{{ food_item }}" name="{{ cat }}">
+                    <label class="form-check-label" for="{{ cat }}-{{ food_item }}">{{ food_item }}</label>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-    {% endfor %} 
     {% endfor %}
     <button type="submit" class="btn btn-form btn-block btn-secondary btn-rounded">Next</button>
 </form>

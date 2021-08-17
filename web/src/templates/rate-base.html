@@ -11,15 +11,16 @@
 
     <!-- All page-specific content should go in here -->
     <div class="container">
-        <div class="rate-form shadow d-flex flex-column full-vertical justify-content-center align-items-center pb-20">
-            {% if dh %}
-                {% if meal %}
-                <h2>{{ dh }} - {{ meal }}</h2>
-                {% else %}
-                <h2>{{ dh }}</h2>  
-                {% endif %}
+        <div id="form-flex-div" class="d-flex flex-column justify-content-center align-items-center pb-20">
+          {% if dh %}
+            <div class="text-center flex-row location-form shadow">
+              {% if meal %}
+              <h2>{{ dh }} - {{ meal }}</h2>
+              {% else %}
+              <h2>{{ dh }}</h2>  
+              {% endif %}
+            </div>
             {% endif %}
-    
             <!-- Jinja directives: page contents will go between them -->
             {% block content %}
             {% endblock %}

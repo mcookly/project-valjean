@@ -1,16 +1,37 @@
+/* Stretch body to full viewport */
+.full-vertical {
+    height: 100vh;
+}
 /* Stylizes rate-base.html */
+form {
+    width: 100%;
+}
+#form-flex-div {
+    margin-top: 100px;
+    margin-bottom: 150px;
+}
+.location-form {
+    border-radius: 10px;
+    padding: 10px 0px 10px 0px;
+    margin-bottom: 20px;
+    width: 100%;
+    align-items: center;
+}
 .rate-form {
     border-radius: 10px;
-    margin-top: 25px;
-    margin-bottom: 150px;
-    padding: 25px;
+    margin-bottom: 20px;
+    width: 100%;
+    overflow: hidden;
+}
+.form-padding {
+    margin: 0px 25px 25px 25px;
 }
 /* Stylize form legends */
 .big-legend {
     display: inline-block;
-    margin-top: 20px;
-    border-bottom-style: solid;
-    border-color: var(--mdb-secondary);
+    text-align: center;
+    background-color: var(--mdb-secondary);
+    color: white;
 }
 /* Fix input scaling */
 input {
