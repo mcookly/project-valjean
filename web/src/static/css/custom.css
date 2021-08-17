@@ -1,8 +1,13 @@
 /* Stylizes rate-base.html */
-#rate-form {
+.rate-form {
     border-radius: 10px;
     margin-top: 25px;
     padding: 25px;
+}
+/* Stylize form legends */
+legend {
+    border-bottom-style: solid;
+    border-color: var(--mdb-secondary);
 }
 /* Color the checkboxes */
 .form-check-input[type=checkbox]:checked {
