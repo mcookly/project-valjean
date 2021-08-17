@@ -16,5 +16,8 @@ COPY scrapy.cfg .
 RUN pip install -r requirements.txt && \
     pip install ./food_crawler/foodhandler
 
-#Run the command
-CMD ["scrapy", "crawl", "ndh"]
+# Run both SDH and NDH spiders
+CMD ["food_crawler/crawl.py"]
+ENTRYPOINT ["python3"]
+
+# NOTE: make sure to name the image 'crawler'

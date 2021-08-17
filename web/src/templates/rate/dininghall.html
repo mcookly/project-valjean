@@ -1,0 +1,9 @@
+{% extends "rate-base.html" %}
+{% set active_page = "Rate" %}
+{% block content %}
+<div class="col-10 col-md-5 text-center">
+    <h3>Choose a dining hall</h3>
+    <a id="home-button" class="btn btn-block btn-lg btn-secondary btn-rounded" href="{{ url_for('selector_dh', dh='North') }}">North</a>
+    <a id="home-button" class="btn btn-block btn-lg btn-secondary btn-rounded" href="{{ url_for('selector_dh', dh='South') }}">South</a>
+</div>
+{% endblock %}
