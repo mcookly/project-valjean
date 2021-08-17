@@ -9,6 +9,7 @@ form {
 #form-flex-div {
     margin-top: 100px;
     margin-bottom: 150px;
+    max-width: 700px;
 }
 .location-form {
     border-radius: 10px;
