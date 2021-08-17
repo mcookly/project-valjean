@@ -3,7 +3,7 @@
 {% block content %}
 <form action="{{ url_for('record_food_items', dh=dh, meal=meal) }}" method="POST" class="me-auto">
     {% for cat in food_items.keys() %}
-    <legend for="{{ cat }}Cat">{{ cat }}</legend>
+    <legend class="big-legend" for="{{ cat }}Cat">{{ cat }}</legend>
     {% for food_item in food_items[cat] %}
         <div class="form-check">
             <!-- name = dict key, value = dict value -->
