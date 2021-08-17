@@ -1,6 +1,7 @@
 import os
-from flask import Flask, send_from_directory, render_template, redirect
+from flask import Flask, send_from_directory, render_template, request, redirect, json
 from flask.helpers import url_for
+
 
 # This line initiates the Flask app
 app = Flask(__name__)
@@ -10,10 +11,53 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-########### Rate
-@app.route('/rate/')
+########### Rate page group
+@app.route('/rate/') # Redirect for simpler navigation to the rating section.
 def rate():
-    return render_template('rate.html')
+    return redirect(url_for('dininghall'))
+@app.route('/rate/dh/') # Select the DH
+def dininghall():
+    return render_template('rate/dininghall.html')
+@app.route('/rate/<dh>/meal/') # Select the meal
+def meal(dh = None):
+    meals = ['Brunch', 'Dinner'] # TODO: replace with SQL data
+    return render_template('rate/meal.html', dh=dh, meals=meals)
+@app.route('/rate/<dh>/<meal>/select/')
+def select(dh, meal):
+    food = {'Beans': ['apple', 'pear', 'salmon'], 'Juice': ['cider', 'banana', 'tuna']} # TODO: replace with SQL data
+    return render_template('rate/select.html', dh=dh, meal=meal, food_items = food)
+@app.route('/rate/rating/<dh>/<meal>/<food>')
+def rating(dh, meal, food):
+    food_dict = json.loads(food)
+    return render_template('rate/rating.html', dh=dh, meal=meal, food=food_dict)
+@app.route('/rate/submitted/<dh>/<meal>')
+def submitted(dh, meal):
+    return render_template('rate/submitted.html', dh=dh, meal=meal)
+
+########### Selector for dining hall selection
+@app.route('/session/dh/<dh>/')
+def selector_dh(dh):
+    return redirect(url_for('meal', dh=dh))
+
+########### Selector for meal selection
+@app.route('/session/<dh>/<meal>')
+def selector_meal(dh, meal):
+    return redirect(url_for('select', dh=dh, meal=meal))
+
+########### Stores selected food items
+@app.route('/session/<dh>/<meal>/food-items', methods=['POST'])
+def record_food_items(dh, meal):
+    food = request.form.to_dict(flat=False) # Gives food items per category
+    food_str = json.dumps(food)
+    return redirect(url_for('rating', dh=dh, meal=meal, food=food_str))
+
+########### Writes ratings to DB
+@app.route('/session/<dh>/<meal>/submit', methods=['POST'])
+def submit_ratings(dh, meal):
+    # Code for writing to DB goes here.
+    rating = request.form.to_dict(flat=False) # Gives # rating per category-food
+    # TODO: split cat-food str and send to DB.
+    return redirect(url_for('submitted', dh=dh, meal=meal))
 
 ########### Stats
 @app.route('/stats/')
