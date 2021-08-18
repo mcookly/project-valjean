@@ -1,27 +1,31 @@
-import json, logging
+import firebase_admin, os
+from firebase_admin import credentials, firestore
+from datetime import datetime
 # Define your item pipelines here
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
-
-# useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
-
 class FoodCrawlerPipeline:
     def __init__(self):
         # Initialize pipeline here
-        logging.info("pipeline!!!")
-        pass
+        CUR_DIR = os.getcwd()
+        AUTH_PATH = os.path.join(CUR_DIR, 'food_crawler/Firebase_Auth.json')
+        cred = credentials.Certificate(AUTH_PATH)
+        firebase_admin.initialize_app(cred)
     
     def open_spider(self, spider):
-        self.file = open('items.jl', 'w')
+        self.client = firestore.client()
+        self.collection = self.client.collection('items')
 
     def close_spider(self, spider):
-        self.file.close()
+        self.client.close()
 
     def process_item(self, item, spider):
-        logging.info(item)
-        line = json.dumps(ItemAdapter(item).asdict()) + "\n"
-        self.file.write(line)
+        self.collection.document(item['name']).set({
+            'category': item['category'],
+            'date': datetime.now().strftime('%Y-%m-%d'),
+            'dh': item['dining_hall'],
+            'meal': item['meal']
+        })
         return item
