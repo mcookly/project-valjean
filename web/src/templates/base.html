@@ -3,14 +3,14 @@
   {% block head %}
     {% include "components/head.html" %}
   {% endblock head %}
-  <body>
+  <body style="margin: 80px 0px 80px 0px;">
     <!-- Header (will only link to index.html) -->
     {% block header %}
       {% include "components/header.html" %}
     {% endblock header %}
 
     <!-- All page-specific content should go in here -->
-    <div class="container">
+    <div class="container mx-auto">
     
         <!-- Jinja directives: page contents will go between them -->
         {% block content %}
