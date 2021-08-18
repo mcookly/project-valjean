@@ -1,0 +1,69 @@
+#home-button {
+    margin-top: 10px;
+}
+#home-logo {
+    width: 20%;
+    height: auto;
+    min-width: 110px;
+}
+/* Stretch body to full viewport */
+.full-vertical {
+    height: 100vh;
+}
+/* Stylizes rate-base.html */
+form {
+    width: 100%;
+}
+#form-flex-div {
+    margin-top: 100px;
+    margin-bottom: 150px;
+    max-width: 700px;
+}
+.location-form {
+    border-radius: 10px;
+    padding: 10px 0px 10px 0px;
+    margin-bottom: 20px;
+    width: 100%;
+    align-items: center;
+}
+.rate-form {
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    overflow: hidden;
+}
+.form-padding {
+    margin: 0px 25px 25px 25px;
+}
+/* Stylize form legends */
+.big-legend {
+    display: inline-block;
+    text-align: center;
+    background-color: var(--mdb-secondary);
+    color: white;
+}
+/* Fix input scaling */
+input {
+    width: 0;
+}
+/* Color the checkboxes */
+.form-check-input[type=checkbox]:checked,
+.form-check-input[type=checkbox]:checked:active,
+.form-check-input[type=checkbox]:checked:focus {
+    background-color: var(--mdb-secondary);
+    border-color: var(--mdb-secondary);
+}
+.btn-form {
+    margin-top: 10px;
+}
+/* Size the radio buttons */
+.btn-rate {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 24px;
+    border-radius: 50%;
+    margin-left: 5px;
+    margin-right: 5px;
+}

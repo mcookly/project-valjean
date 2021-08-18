@@ -1,0 +1,10 @@
+{% extends "rate-base.html" %}
+{% set active_page = "Rate" %}
+{% block content %}
+<div class="col-10 col-md-5 text-center">
+    <h3>Select a meal</h3>
+    {% for meal in meals %}
+    <a id="home-button-{{ meal }}" class="btn btn-block btn-lg btn-secondary btn-rounded" href="{{ url_for('select', dh=dh, meal=meal) }}">{{ meal }}</a>
+    {% endfor %}
+</div>
+{% endblock %}

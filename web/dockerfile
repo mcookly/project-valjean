@@ -25,6 +25,6 @@ ENV FLASK_APP=main.py
 EXPOSE 5000
 
 #Run the command
-# NOTE: '--host 0.0.0.0' is only being used to expose Flask outside Docker.
+# NOTE: '--host=0.0.0.0' is only being used to expose Flask outside Docker.
 # I'm not sure whether we will need to keep that command in.
-CMD ["flask", "run", "--host", "0.0.0.0"]
+CMD ["flask", "run", "--host=0.0.0.0"]

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% block head %}
+    {% include "components/head.html" %}
+  {% endblock head %}
+  <body>
+    <!-- Header (will only link to index.html) -->
+    {% block header %}
+      {% include "components/header.html" %}
+    {% endblock header %}
+
+    <!-- All page-specific content should go in here -->
+    <div class="container">
+        <div id="form-flex-div" class="d-flex flex-column justify-content-center align-items-center pb-20 mx-auto">
+          {% if dh %}
+            <div class="text-center flex-row location-form shadow">
+              {% if meal %}
+              <h2>{{ dh }} - {{ meal }}</h2>
+              {% else %}
+              <h2>{{ dh }}</h2>  
+              {% endif %}
+            </div>
+            {% endif %}
+            <!-- Jinja directives: page contents will go between them -->
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- Footer (navbar) -->
+    {% block navbar %}
+      {% include 'components/navbar.html' %}
+    {% endblock navbar %}
+
+    <!-- MDB -->
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
+    ></script>
+  </body>
+</html>
