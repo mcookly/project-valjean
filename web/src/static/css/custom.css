@@ -67,3 +67,8 @@ input {
     margin-left: 5px;
     margin-right: 5px;
 }
+/* Error handler countdown */
+#countdown {
+    color: var(--mdb-secondary);
+    font-size: 4em;
+}
