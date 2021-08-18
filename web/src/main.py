@@ -82,5 +82,5 @@ def handle_404(error):
     return redirect(url_for('index'), 303)
 
 # Since this is the main script of the app, have it run itself.
-if __name__ == "__main__":
-    app.run(debug=True)
+# if __name__ == "__main__":
+#     app.run(debug=True, host='0.0.0.0', port=5000)

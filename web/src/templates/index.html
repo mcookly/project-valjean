@@ -1,9 +1,21 @@
 <!DOCTYPE html>
 {% set active_page = "Home" %}
-
 <html lang="en">
 {% include 'components/head.html' %}
     <body>
-        <h1>This is merely a test text to see if the page works. :)</h1>
+        <!-- Found this centering technique from here:
+        https://stackoverflow.com/questions/42388989/bootstrap-center-vertical-and-horizontal-alignment -->
+        <div class="container px-0 mx-auto">
+            <div class="d-flex flex-column full-vertical justify-content-center align-items-center pb-20">
+                <img id="home-logo" src="../static/img/svg/pv-logo-default.svg" width="110" height="110">
+                <h3>Welcome to Project Valjean!</h3>
+                <div class="col-md-5 text-justify mx-5">
+                    <p>This is an experimental, <b>student-developed</b> food rating system for the two dining halls at Notre Dame. Click <b>Rate</b> below to get started.</p>
+                    <a id="home-button" class="btn btn-block btn-lg btn-secondary btn-rounded" href="{{ url_for('rate') }}">Rate</a>
+                    <a id="home-button" class="btn btn-block btn-lg btn-secondary btn-rounded" href="{{ url_for('stats') }}">Stats</a>
+                    <a id="home-button" class="btn btn-block btn-lg btn-secondary btn-rounded" href="{{ url_for('about') }}">About</a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
