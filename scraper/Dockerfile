@@ -17,7 +17,9 @@ RUN pip install -r requirements.txt && \
     pip install ./food_crawler/foodhandler
 
 # Run both SDH and NDH spiders
-CMD ["food_crawler/crawl.py"]
+# SIMULTANEOUSLY = crawl_sim.py ~ 29s
+# SEQUENTIALLY = crawl_seq.py ~ 26s
+CMD ["food_crawler/crawl_seq.py"]
 ENTRYPOINT ["python3"]
 
 # NOTE: make sure to name the image 'crawler'

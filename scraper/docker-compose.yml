@@ -6,5 +6,7 @@ services:
             - "8050:8050"
     crawler:
         image: "crawler"
+        depends_on:
+            - splash
         ports:
             - "5000:6023"
