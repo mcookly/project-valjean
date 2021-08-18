@@ -10,5 +10,5 @@ process = CrawlerProcess(get_project_settings())
 
 # Run spiders
 process.crawl('sdh')
-process.crawl('sdh')
+process.crawl('ndh')
 process.start()
