@@ -2,6 +2,7 @@ import os, logging, scrapy
 from datetime import date
 from food_crawler.items import FoodCategory
 from scrapy_splash.request import SplashRequest
+from scrapy.selector import Selector
 
 ### Load Lua scripts ###
 CUR_DIR = os.getcwd()
@@ -88,21 +89,42 @@ class DHSPIDER(scrapy.Spider):
             })
     
     def parse_meals(self, response):
-        # Parses the food items from each meal at SDH and organize
-        # into dicts for each meal.
+        # Parses the food items from each meal and sends results through the
+        # item pipeline to be uploaded to Firebase.
 
-        # Creates a dict: {key: meal, value: html from meal's webpage}
-        response_per_meal = response.data
-        # This tag *might* work for SDH as well.
+        response_data = response.data
         xpath_tag = '//table[@class="cbo_nn_itemGridTable"]/tbody/tr//td'
+
         # Extract meal contents
-        # for meal in self.meals_list:
-            # parse_tools.extract_foods_dict(response_per_meal[meal], xpath_tag, meal, 'South')
+        for meal in self.meals_list:
+            meal_data = Selector(text=response_data[meal])
+            # For both DH, nodes of interest are all td
+            td_nodes = meal_data.xpath(xpath_tag)
+
+            # 3 for loops ... :/
+            for i in range(len(td_nodes)):
+                # Using extract_first() to avoid list return of a single item.
+                node = td_nodes[i]
+                if node.xpath('./@class').extract_first() == 'cbo_nn_itemGroupRow':
+                    # Found a category
+                    cat = FoodCategory() # Init category for item pipeline
+                    cat['name'] = node.xpath('./text()').extract_first()
+                    cat['meal'] = meal
+                    cat["dining_hall"] = response.meta.get('dh')
+                    # logging.debug(f'Found category: {cat["name"]}')
+                    foods = list()
+                    for j in range(i+1, len(td_nodes)):
+                        # Cycle through future td's to find meals
+                        mini_node = td_nodes[j]
+                        mini_node_class = mini_node.xpath('./@class').extract_first()
+                        if mini_node_class == 'cbo_nn_itemHover':
+                            # Found a food item under a category
+                            food_item = mini_node.xpath('./text()').extract_first()
+                            foods.append(food_item)
+                            logging.debug(f'    Found food item: {food_item}')
+                        elif mini_node_class == 'cbo_nn_itemGroupRow':
+                            break # Stop at next category
+                    cat['foods'] = foods
+                    yield cat
 
         logging.info(' --- Completed second parse --- ')
-        # -------- @ Nick take over from here. ---------
-        # Add SQL code to the file 'communicator.py' in foodhandler
-        # under write_to_db. We could actually just communicate straight to 
-        # the db in the for loop above.
-
-        # communicator.write_to_db()  
