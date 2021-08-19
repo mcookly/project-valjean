@@ -4,4 +4,4 @@ services:
         ports:
             - "8050:8050"
     scraper:
-        build: .
+        image: "scraper"

@@ -1,5 +1,5 @@
 #Pull from Splash as the base image
-FROM python:3.9.6
+FROM python:3.9.6-slim
 
 #Install needed packages
 RUN apt-get update -y

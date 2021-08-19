@@ -15,16 +15,21 @@ class FoodCrawlerPipeline:
         firebase_admin.initialize_app(cred)
     
     def open_spider(self, spider):
+        self.date = datetime.now().strftime('%Y-%m-%d')
         self.client = firestore.client()
-        self.collection = self.client.collection('items')
+        self.collection = self.client.collection('scraped-' + self.date)
 
     def close_spider(self, spider):
         self.client.close()
 
     def process_item(self, item, spider):
-        self.collection.document(item['name']).set({
+        # Each food item has a unique ID to prevent any overwriting if both
+        # DHs have identical foods. Another option would be to use
+        # subcollections.
+        self.collection.add({
+            'name': item['name'],
             'category': item['category'],
-            'date': datetime.now().strftime('%Y-%m-%d'),
+            'date': self.date,
             'dh': item['dining_hall'],
             'meal': item['meal']
         })
