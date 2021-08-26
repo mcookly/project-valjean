@@ -20,7 +20,7 @@ def dininghall():
     return render_template('rate/dininghall.html')
 @app.route('/rate/<dh>/meal/') # Select the meal
 def meal(dh):
-    if dh not in ('sdh', 'ndh'):
+    if dh not in ('South', 'North'):
         return redirect(url_for('missing_data', data=dh))
     meals = ['Brunch', 'Dinner'] # TODO: replace with SQL data
     return render_template('rate/meal.html', dh=dh, meals=meals)
