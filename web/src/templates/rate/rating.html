@@ -4,19 +4,18 @@
 <script>
     $(document).ready(function() {
         $(".btn-check").click(function(e) {
+            // Change thumbs up/down color on active radion btn.
             var value = this.value;
             var name = this.name;
             console.log("Clicked " + this.id); // debug
-            for (let i=1; i<7; i++) {
-                var btn = "#label-" + name + "-" + i;
-                if (i === parseInt(value)) {
-                    // Using toggleClass for simplicity.
-                    $(btn).toggleClass("btn-outline-secondary btn-secondary");
-                } else {
-                    // This requires a manual add-remove.
-                    $(btn).removeClass("btn-secondary");
-                    $(btn).addClass("btn-outline-secondary");
-                }
+            if(value === "0") {
+                // Thumbs down
+                $("#label-" + name + "-down").attr("style", "color: white");
+                $("#label-" + name + "-up").removeAttr("style", "color:white");
+            } else {
+                // Thumbs up
+                $("#label-" + name + "-up").attr("style", "color: white");
+                $("#label-" + name + "-down").removeAttr("style", "color:white");
             }
         });
     });
@@ -30,11 +29,17 @@
             <legend for="{{ food_item }}Item">{{ food_item }}</legend>
         </div>
         <div class="flex-row form-padding">
-            {% for i in range(1,6) %}
             <!-- name = dict key, value = dict value -->
-            <input class="btn-check" type="radio" value="{{ i }}" id="{{ cat }}-{{ food_item }}-{{ i }}" name="{{cat}}-{{ food_item }}" autocomplete="off">
-            <label id="label-{{ cat }}-{{ food_item }}-{{ i }}" class="btn btn-rate btn-outline-secondary" for="{{ cat }}-{{ food_item }}-{{ i }}">{{ i }}</label>
-            {% endfor %}
+            <!-- Thumbs down -->
+            <input class="btn-check" type="radio" value="0" id="{{ cat }}-{{ food_item }}-down" name="{{cat}}-{{ food_item }}" autocomplete="off">
+            <label id="label-{{ cat }}-{{ food_item }}-down" class="btn btn-rate btn-outline-secondary" for="{{ cat }}-{{ food_item }}-down">
+                <i class="bi bi-hand-thumbs-down"></i>
+            </label>
+            <!-- Thumbs up -->
+            <input class="btn-check" type="radio" value="1" id="{{ cat }}-{{ food_item }}-up" name="{{cat}}-{{ food_item }}" autocomplete="off">
+            <label id="label-{{ cat }}-{{ food_item }}-up" class="btn btn-rate btn-outline-secondary" for="{{ cat }}-{{ food_item }}-up">
+                <i class="bi bi-hand-thumbs-up"></i>
+            </label>
         </div>
         {% endfor %}
     </div>
