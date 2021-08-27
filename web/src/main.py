@@ -26,7 +26,7 @@ def meal(dh):
     return render_template('rate/meal.html', dh=dh, meals=meals)
 @app.route('/rate/<dh>/<meal>/select/')
 def select(dh, meal):
-    food = {'Beans': ['apple', 'pear', 'salmon'], 'Juice': ['cider', 'banana', 'tuna']} # TODO: replace with SQL data
+    food = {'Beans': ['apple', 'pear', 'salmon', 'apple2', 'pear2', 'salmon2', 'apple3', 'pear3', 'salmon3',], 'Juice': ['cider', 'banana', 'tuna']} # TODO: replace with SQL data
     return render_template('rate/select.html', dh=dh, meal=meal, food_items = food)
 @app.route('/rate/rating/<dh>/<meal>/<food>')
 def rating(dh, meal, food):
