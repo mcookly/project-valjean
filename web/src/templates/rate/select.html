@@ -15,7 +15,7 @@
     {% for cat in food_items.keys() %}
         <div class="flex-row rate-form shadow">
             <legend class="big-legend" for="{{ cat }}Cat">{{ cat }}</legend>
-            <div class="form-padding">
+            <div class="form-padding text-center">
                 {% for food_item in food_items[cat] %}
                 <div class="form-check-inline">
                     <!-- name = dict key, value = dict value -->
@@ -26,6 +26,13 @@
             </div>
         </div>
     {% endfor %}
-    <button type="submit" class="btn btn-form btn-block btn-secondary btn-rounded btn-lg">Next</button>
+    <div class="row">
+        <div class="col">
+            <a type="back" class="btn btn-form btn-block btn-outline-secondary btn-rounded btn-lg" href="{{ url_for('meal', dh=dh, meal=meal) }}">&larr; Back</a>
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-form btn-block btn-secondary btn-rounded btn-lg">Next &rarr;</button>
+        </div>
+    </div>
 </form>
 {% endblock %}

@@ -44,6 +44,13 @@
         {% endfor %}
     </div>
     {% endfor %}
-    <button type="submit" class="btn btn-form btn-block btn-secondary btn-rounded btn-lg">Rate</button>
+    <div class="row">
+        <div class="col">
+            <a type="back" class="btn btn-form btn-block btn-outline-secondary btn-rounded btn-lg" href="{{ url_for('select', dh=dh, meal=meal, food_items=food) }}">&larr; Back</a>
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-form btn-block btn-secondary btn-rounded btn-lg">Rate !</button>
+        </div>
+    </div>
 </form>
 {% endblock %}
