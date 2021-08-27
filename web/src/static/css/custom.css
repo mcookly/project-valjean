@@ -67,6 +67,12 @@ input {
     margin-left: 10px;
     margin-right: 10px;
 }
+.btn-check:active+.btn-outline-secondary,
+.btn-check:checked+.btn-outline-secondary,
+.btn-outline-secondary.active,
+.btn-outline-secondary:active {
+    color: #fff;
+}
 /* Error handler countdown */
 #countdown {
     color: var(--mdb-secondary);

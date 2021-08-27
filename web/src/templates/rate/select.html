@@ -1,21 +1,11 @@
 {% extends "rate-base.html" %}
 {% set active_page = "Rate" %}
 {% block content %}
-<script>
-    $(document).ready(function() {
-        $(".btn-check").click(function(e) {
-            // Change thumbs up/down color on active radion btn.
-            var id = this.id;
-            console.log("Clicked " + id); // debug
-            $("#label-" + id).toggleClass("btn-outline-secondary btn-secondary");
-        });
-    });
-</script>
 <form action="{{ url_for('record_food_items', dh=dh, meal=meal) }}" style="width: 100%;" method="POST">
     {% for cat in food_items.keys() %}
         <div class="flex-row rate-form shadow">
             <legend class="big-legend" for="{{ cat }}Cat">{{ cat }}</legend>
-            <div class="form-padding text-center">
+            <div class="form-padding">
                 {% for food_item in food_items[cat] %}
                 <div class="form-check-inline">
                     <!-- name = dict key, value = dict value -->
