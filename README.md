@@ -1,3 +1,5 @@
+<img src="web/src/static/img/svg/pv-logo-default.svg" alt="Logo" width="150px">
+
 # Project Valjean
 Project Valjean is an experimental app designed for rating the food at Notre Dame and understanding what foods are liked and disliked. Have any questions or comments?
 Feel free to contact us at projvaljean@gmail.com.
