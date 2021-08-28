@@ -197,4 +197,4 @@ Temporary Items
 scraper/food_crawler/scripts/test_html.html
 scraper/food_crawler/scripts/test_0.py
 scraper/old_files/*
-SECRETS/
+scraper/food_crawler/SECRETS/*

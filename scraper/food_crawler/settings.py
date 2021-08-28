@@ -15,7 +15,7 @@ NEWSPIDER_MODULE = 'food_crawler.spiders'
 # Splash integration
 # Change to "splash" for build and "localhost" for focused debugging?
 # localhost seems to work with Docker Compose now...
-SPLASH_URL = 'http://splash:8050'
+SPLASH_URL = 'http://localhost:8050'
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
