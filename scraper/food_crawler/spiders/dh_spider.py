@@ -32,7 +32,7 @@ class DHSPIDER(scrapy.Spider):
     current_day = date.today().strftime('%A, %B %-d, %Y')
     meals_list = tuple()
     # Page selectors
-    wait_time = 1
+    wait_time = 3
     dining_hall_sel = {
         'South': 'tr.cbo_nn_unitsPrimaryRow:nth-child(5) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)',
         'North': 'tr.cbo_nn_unitsAlternateRow:nth-child(2) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)'
@@ -67,7 +67,7 @@ class DHSPIDER(scrapy.Spider):
                 break
         # Get list of meals for the day
         # '//a' is cycling through all child nodes under the current day node.
-        self.meals_list = response.xpath('//*[@id="MenuList"]/div[2]/table/tbody/tr[1]/td/table/tbody/tr[2]/td/table/tbody/tr//a/text()').extract()
+        self.meals_list = response.xpath(f'//*[@id="MenuList"]/div[2]/table/tbody/tr[{i}]/td/table/tbody/tr[2]/td/table/tbody/tr//a/text()').extract()
         logging.info(f'Found {len(self.meals_list)} meal(s): {self.meals_list}')
         logging.info(' --- Completed first parse --- ')
 
@@ -93,7 +93,6 @@ class DHSPIDER(scrapy.Spider):
 
         response_data = response.data
         xpath_tag = '//table[@class="cbo_nn_itemGridTable"]/tbody/tr//td'
-
         # Extract meal contents
         for meal in self.meals_list:
             meal_data = Selector(text=response_data[meal])

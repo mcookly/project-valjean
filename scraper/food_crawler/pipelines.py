@@ -10,7 +10,7 @@ class FoodCrawlerPipeline:
     def __init__(self):
         # Initialize pipeline here
         CUR_DIR = os.getcwd()
-        AUTH_PATH = os.path.join(CUR_DIR, 'food_crawler/SECRETS/firebase_SECRET.json')
+        AUTH_PATH = os.path.join(CUR_DIR, 'food_crawler/SECRETS/firebase_key.json')
         cred = credentials.Certificate(AUTH_PATH)
         firebase_admin.initialize_app(cred)
     
