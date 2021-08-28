@@ -196,12 +196,5 @@ Temporary Items
 .vscode/launch.json
 scraper/food_crawler/scripts/test_html.html
 scraper/food_crawler/scripts/test_0.py
-scraper/food_crawler/Firebase_Auth.json
-scraper/old_files/crawl_seq.py
-scraper/old_files/crawl_sim.py
-scraper/old_files/foodhandler/foodhandler/__init__.py
-scraper/old_files/foodhandler/foodhandler/communicator.py
-scraper/old_files/foodhandler/foodhandler/parse_tools.py
-scraper/old_files/foodhandler/setup.py
-scraper/old_files/ndh_spider.py
-scraper/old_files/sdh_spider.py
+scraper/old_files/*
+SECRETS/
