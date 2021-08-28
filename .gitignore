@@ -196,5 +196,5 @@ Temporary Items
 .vscode/launch.json
 scraper/food_crawler/scripts/test_html.html
 scraper/food_crawler/scripts/test_0.py
-scraper/old_files/*
+scraper/old_files
 scraper/food_crawler/SECRETS
