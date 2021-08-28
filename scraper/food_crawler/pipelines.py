@@ -17,7 +17,9 @@ class FoodCrawlerPipeline:
     def open_spider(self, spider):
         self.date = datetime.now().strftime('%Y-%m-%d')
         self.client = firestore.client()
-        self.collection = self.client.collection('scraped-' + self.date)
+        # self.collection = self.client.collection('scraped-' + self.date)
+        self.north_col = self.client.collection('North')
+        self.south_col = self.client.collection('South')
 
     def close_spider(self, spider):
         self.client.close()
@@ -26,9 +28,15 @@ class FoodCrawlerPipeline:
         # Each food item has a unique ID to prevent any overwriting if both
         # DHs have identical foods. Another option would be to use
         # subcollections.
-        self.collection.add({
+        item_dh = item['dining_hall']
+        if item_dh == 'North':
+            dh_col = self.north_col
+        elif item_dh == 'South':
+            dh_col = self.south_col
+
+        dh_col.document(item['meal'] + '-' + item['name']).set({
             'name': item['name'],
-            'category': item['category'],
+            'foods': item['foods'],
             'date': self.date,
             'dh': item['dining_hall'],
             'meal': item['meal']
