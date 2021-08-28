@@ -1,6 +1,20 @@
+<img src="web/src/static/img/svg/pv-logo-default.svg" alt="Logo" width="150px">
+
 # Project Valjean
 Project Valjean is an experimental app designed for rating the food at Notre Dame and understanding what foods are liked and disliked. Have any questions or comments?
 Feel free to contact us at projvaljean@gmail.com.
+### Screenshots (iPhone X)
+---
+#### Home
+<img src="readme_images/home_ix.png" alt="Home" width="200px">
+
+#### Rate
+<img src="readme_images/rate_dh_ix.png" alt="Home" width="200px">
+<img src="readme_images/rate_meal_ix.png" alt="Home" width="200px">
+<img src="readme_images/rate_select_ix.png" alt="Home" width="200px">
+<img src="readme_images/rate_rate_ix.png" alt="Home" width="200px">
+<img src="readme_images/rate_done_ix.png" alt="Home" width="200px">
+
 ### Why?
 We decided on the concept of a food-review system for Notre Dame’s dining halls because
 1. the project appeared to be feasible given both the time constraint (about 1.5 months) and our skill level (knowing nothing about software dev),
@@ -15,6 +29,8 @@ Our approach to the problem was fairly simple.
 4. The user would select the foods they ate and then rate them good or bad.
 5. Store the user’s feedback in the database.
 6. Present the user statistics on the food.
+# Challenges
+---
 ### Scraper
 Our first problem quickly materialized from the fact that we had to scrape dynamic content off the website. Scrapy could only scrape static content, so we turned to another solution: the headless browser Splash since Selenium would be too heavy for our needs. Using the [Scrapy-Splash](https://github.com/scrapy-plugins/scrapy-splash) python library, we were able to configure a Scrapy spider that would load the dynamic content via mouse clicks and then scrape the food data. In the process, we had to learn some basic Lua, some basic html protocol, and how to identify specific web elements using CSS selectors and XPath.
 ### Docker
