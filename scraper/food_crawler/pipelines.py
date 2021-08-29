@@ -1,6 +1,6 @@
 import firebase_admin, os
 from firebase_admin import credentials, firestore
-from datetime import datetime
+from datetime import datetime, timedelta, date
 # Define your item pipelines here
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
@@ -13,15 +13,23 @@ class FoodCrawlerPipeline:
         AUTH_PATH = os.path.join(CUR_DIR, 'food_crawler/SECRETS/firebase_key.json')
         cred = credentials.Certificate(AUTH_PATH)
         firebase_admin.initialize_app(cred)
-    
+
     def open_spider(self, spider):
-        self.date = datetime.now().strftime('%Y-%m-%d')
+        self.date = date.today()
         self.client = firestore.client()
-        # self.collection = self.client.collection('scraped-' + self.date)
         self.north_col = self.client.collection('North')
         self.south_col = self.client.collection('South')
 
     def close_spider(self, spider):
+        # Delete any old categories from the previous day
+        def clean_db(collection):
+            yesterday = str(self.date - timedelta(days=1))
+            old_cats = collection.where('date', '==', yesterday).stream()
+            for old_cat in old_cats:
+                old_cat.reference.delete()
+
+        clean_db(self.north_col)
+        clean_db(self.south_col)
         self.client.close()
 
     def process_item(self, item, spider):
@@ -37,7 +45,7 @@ class FoodCrawlerPipeline:
         dh_col.document(item['meal'] + '-' + item['name']).set({
             'name': item['name'],
             'foods': item['foods'],
-            'date': self.date,
+            'date': str(self.date),
             'dh': item['dining_hall'],
             'meal': item['meal']
         })
