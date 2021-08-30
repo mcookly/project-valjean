@@ -32,7 +32,7 @@ class DHSPIDER(scrapy.Spider):
     current_day = date.today().strftime('%A, %B %-d, %Y')
     meals_list = tuple()
     # Page selectors
-    wait_time = 1
+    wait_time = 2
     dining_hall_sel = {
         'South': 'tr.cbo_nn_unitsPrimaryRow:nth-child(5) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)',
         'North': 'tr.cbo_nn_unitsAlternateRow:nth-child(2) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)'
@@ -58,20 +58,20 @@ class DHSPIDER(scrapy.Spider):
         # Parses data from SDH's day/meal selection menu.
         # This extracts the current day's meals' CSS selectors for
         # the next extraction.
+        dining_hall = response.meta.get('dh')
 
         # Find node index for the current day
         for i in range(1, 8):
             day = response.css(f'div.cbo_nn_menuTableDiv tr:nth-child({i}) td.cbo_nn_menuCell td::text').get()
             if day == self.current_day:
-                logging.info(f'Found the current day ({day}) at node index {i}.')
+                logging.info(f'[{dining_hall}]: Found the current day ({day}) at node index {i}.')
                 break
         # Get list of meals for the day
         # '//a' is cycling through all child nodes under the current day node.
         self.meals_list = response.xpath(f'//*[@id="MenuList"]/div[2]/table/tbody/tr[{i}]/td/table/tbody/tr[2]/td/table/tbody/tr//a/text()').extract()
-        logging.info(f'Found {len(self.meals_list)} meal(s): {self.meals_list}')
-        logging.info(' --- Completed first parse --- ')
+        logging.info(f'[{dining_hall}]: Found {len(self.meals_list)} meal(s): {self.meals_list}')
+        logging.info(f'[{dining_hall}]: Completed first parse')
 
-        dining_hall = response.meta.get('dh')
         yield SplashRequest(
             url=self.url,
             callback=self.parse_meals,
@@ -125,4 +125,4 @@ class DHSPIDER(scrapy.Spider):
                             yield cat_item
                             break # Stop at next category
 
-        logging.info(' --- Completed second parse --- ')
+        logging.info(f'[{response.meta.get("dh")}]: Completed second parse')

@@ -1,6 +1,7 @@
 import firebase_admin, os
 from firebase_admin import credentials, firestore
-from datetime import datetime, timedelta, date
+from datetime import timedelta, date
+import logging
 # Define your item pipelines here
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
@@ -23,11 +24,12 @@ class FoodCrawlerPipeline:
     def close_spider(self, spider):
         # Delete any old categories from the previous day
         def clean_db(collection):
+            logging.info(f"Cleaning {collection.id}...")
             yesterday = str(self.date - timedelta(days=1))
             old_cats = collection.where('date', '==', yesterday).stream()
             for old_cat in old_cats:
                 old_cat.reference.delete()
-
+            logging.info(f"Cleaned {collection.id}")
         clean_db(self.north_col)
         clean_db(self.south_col)
         self.client.close()
