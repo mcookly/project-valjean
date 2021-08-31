@@ -1,7 +1,7 @@
 #Create an ubuntu base image with python 3 installed.
-FROM ubuntu:20.04
-
-#Install needed packages
+# FROM ubuntu:20.04
+FROM python:3.9-slim
+# #Install needed packages
 RUN set -xe \
 && apt-get update -y \
 && apt-get install -y python3-pip
