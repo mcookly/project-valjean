@@ -19,12 +19,15 @@ def rate():
 def dininghall():
     return render_template('rate/dininghall.html')
 @app.route('/rate/<dh>/meal/') # Select the meal
-def meal(dh = None):
-    meals = ['Brunch', 'Dinner'] # TODO: replace with SQL data
-    return render_template('rate/meal.html', dh=dh, meals=meals)
+def meal(dh):
+    if dh not in ('South', 'North'):
+        return redirect(url_for('missing_data', data=dh))
+    else:
+        meals = ['Breakfast', 'Lunch', 'Dinner'] # TODO: replace with SQL data
+        return render_template('rate/meal.html', dh=dh, meals=meals)
 @app.route('/rate/<dh>/<meal>/select/')
 def select(dh, meal):
-    food = {'Beans': ['apple', 'pear', 'salmon'], 'Juice': ['cider', 'banana', 'tuna']} # TODO: replace with SQL data
+    food = {'Grill': ['Gluten Free Hamburger Buns', 'Char-Grilled Chicken Breast', 'Crispy Chicken Patty', 'Hot Dog Buns', 'Beef and Mushroom Burger'], 'Pizzeria': ['Sausage Pizza', 'Cheese Pizza', 'Pepperoni Pizza']} # TODO: replace with SQL data
     return render_template('rate/select.html', dh=dh, meal=meal, food_items = food)
 @app.route('/rate/rating/<dh>/<meal>/<food>')
 def rating(dh, meal, food):
@@ -75,6 +78,12 @@ def favicon():
     return send_from_directory(
         os.path.join(app.root_path, 'static/img/favicon'),
         'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+########### Error page for missing fata
+@app.route('/error/missing-<data>')
+def missing_data(data):
+    return render_template('error/missing-data.html', data=data)
+
 
 ########### Error handling for missing pages
 @app.errorhandler(404)

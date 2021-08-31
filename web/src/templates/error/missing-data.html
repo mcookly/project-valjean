@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% set active_page = "Error" %}
+{% block content %}
+<script>
+    var time = 5;
+    var x = setInterval(function() {
+        document.getElementById("countdown").innerHTML = time;
+        time -= 1;
+        if (time < 0) {
+            clearInterval(x);
+            window.location.href = "{{ url_for('index') }}";
+        }
+    }, 1000);
+</script>
+<div class="text-center">
+    <h1>oops!</h1>
+    <p>Unable to find or process <b>{{ data }}</b>. Redirecting you to Home in...</p>
+    <h1 id="countdown"></h1>
+</div>
+{% endblock %}

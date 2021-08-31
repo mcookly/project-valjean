@@ -6,5 +6,6 @@
     {% for meal in meals %}
     <a id="home-button-{{ meal }}" class="btn btn-block btn-lg btn-secondary btn-rounded" href="{{ url_for('select', dh=dh, meal=meal) }}">{{ meal }}</a>
     {% endfor %}
+    <a class="btn btn-form btn-block btn-outline-secondary btn-rounded btn-lg" href="{{ url_for('dininghall') }}">&larr; Back</a>
 </div>
 {% endblock %}
