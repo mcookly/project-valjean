@@ -3,6 +3,7 @@
 # Project Valjean
 Project Valjean is an experimental app designed for rating the food at Notre Dame and understanding what foods are liked and disliked. Have any questions or comments?
 Feel free to contact us at projvaljean@gmail.com.
+[Check out the prototype!](https://www.projectvaljean.com)
 
 ### Table of contents
 - [Why?](#why)
