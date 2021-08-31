@@ -1,0 +1,25 @@
+FROM python:3.9-slim
+
+# For proper logging with Knative
+ENV PYTHONUNBUFFERED True
+
+#Set the working directory
+WORKDIR /code
+
+# Copy requirements.txt first
+COPY requirements.txt .
+
+# Install all the dependencies
+RUN pip install -r requirements.txt
+
+#copy all the files
+COPY src/ .
+
+# Direct to Flask app
+ENV FLASK_APP=main.py
+
+#Expose the required port
+EXPOSE 8080
+
+#Run the command
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 wsgi:app
