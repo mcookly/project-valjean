@@ -3,7 +3,8 @@
 # Project Valjean
 Project Valjean is an experimental app designed for rating the food at Notre Dame and understanding what foods are liked and disliked. Have any questions or comments?
 Feel free to contact us at projvaljean@gmail.com.
-[Check out the prototype!](https://www.projectvaljean.com)
+
+[Check out the prototype!](https://projectvaljean.com/)
 
 ### Table of contents
 - [Why?](#why)
@@ -19,7 +20,7 @@ We decided on the concept of a food-review system for Notre Dame’s dining hall
 
 ### Approach
 Our approach to the problem was fairly simple.
-1. Scrape [Notre Dame’s meal webpage](nutrition.nd.edu/NetNutrition1) using the python web-scraper, [Scrapy](https://scrapy.org/).
+1. Scrape [Notre Dame’s meal webpage](http://nutrition.nd.edu/NetNutrition/1#) using the python web-scraper, [Scrapy](https://scrapy.org/).
 2. Store the scraped data in a database.
 3. Have the user scan a QR code to access the website. Once loaded, the user would be presented a form with a list of all the foods for the given day. 
 4. The user would select the foods they ate and then rate them good or bad.
