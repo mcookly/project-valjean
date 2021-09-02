@@ -3,10 +3,18 @@
 {% block content %}
 <script>
     $(document).ready(function() {
+        let totalItems = $(".food-item").length;
+        let rated = [];
+
         $(".btn-check").click(function(e) {
-            // Change thumbs up/down color on active radion btn.
             var value = this.value;
             var name = this.name;
+            // Add item to rated list
+            if (!rated.includes(name)) {
+                rated.push(name);
+            }
+            
+            // Change thumbs up/down color on active radion btn.
             console.log("Clicked " + this.id); // debug
             if(value === "0") {
                 // Thumbs down
@@ -17,6 +25,14 @@
                 $("#label-" + name + "-up").attr("style", "color: white");
                 $("#label-" + name + "-down").removeAttr("style", "color:white");
             }
+            
+            // If rated list equals number of items to rate, then enable
+            // the submit button.
+            if (rated.length === totalItems) {
+                $(".btn[type='submit']").attr("disabled", false);
+            } else {
+                $(".btn[type='submit']").attr("disabled", true);
+            }
         });
     });
 </script>
@@ -26,7 +42,7 @@
         <legend class="big-legend" for="{{ cat }}Cat">{{ cat }}</legend>
         {% for food_item in food[cat] %}
         <div class="flex-row form-padding">
-            <legend for="{{ food_item }}Item">{{ food_item }}</legend>
+            <legend class="food-item" for="{{ food_item }}Item">{{ food_item }}</legend>
         </div>
         <div class="flex-row form-padding">
             <!-- name = dict key, value = dict value -->
@@ -49,7 +65,7 @@
             <a type="back" class="btn btn-form btn-block btn-outline-secondary btn-rounded btn-lg" href="{{ url_for('select', dh=dh, meal=meal, food_items=food) }}">&larr; Back</a>
         </div>
         <div class="col">
-            <button type="submit" class="btn btn-form btn-block btn-secondary btn-rounded btn-lg">Rate !</button>
+            <button type="submit" class="btn btn-form btn-block btn-secondary btn-rounded btn-lg" disabled="disabled">Rate !</button>
         </div>
     </div>
 </form>
