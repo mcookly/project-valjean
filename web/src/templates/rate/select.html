@@ -1,6 +1,26 @@
 {% extends "rate-base.html" %}
 {% set active_page = "Rate" %}
 {% block content %}
+<script>
+    $(document).ready(function() {
+        $(".btn-check").on("click", function (e) {
+            $(this).toggleClass("checked");
+
+            let numChecked = 0;
+            $(".btn-check").each(function() {
+                if ($(this).hasClass("checked")) {
+                    numChecked += 1;
+                }
+            });
+            
+            if (numChecked === 0) {
+                $(".btn[type='submit']").attr("disabled", true);
+            } else {
+                $(".btn[type='submit']").attr("disabled", false);
+            }
+        });
+    });
+</script>
 <form action="{{ url_for('record_food_items', dh=dh, meal=meal) }}" style="width: 100%;" method="POST">
     {% for cat in food_items.keys() %}
         <div class="flex-row rate-form shadow">
@@ -21,7 +41,7 @@
             <a type="back" class="btn btn-form btn-block btn-outline-secondary btn-rounded btn-lg" href="{{ url_for('meal', dh=dh, meal=meal) }}">&larr; Back</a>
         </div>
         <div class="col">
-            <button type="submit" class="btn btn-form btn-block btn-secondary btn-rounded btn-lg">Next &rarr;</button>
+            <button type="submit" class="btn btn-form btn-block btn-secondary btn-rounded btn-lg" disabled="disabled">Next &rarr;</button>
         </div>
     </div>
 </form>
