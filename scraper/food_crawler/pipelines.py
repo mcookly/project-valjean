@@ -10,10 +10,13 @@ import logging
 class FoodCrawlerPipeline:
     def __init__(self):
         # Initialize pipeline here
-        CUR_DIR = os.getcwd()
-        AUTH_PATH = os.path.join(CUR_DIR, 'food_crawler/SECRETS/firebase_key.json')
+        try:
+            AUTH_PATH = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+        except:
+            logging.error("Failed to find service account key!")
         cred = credentials.Certificate(AUTH_PATH)
         firebase_admin.initialize_app(cred)
+        logging.info("Opened Firebase session successfully")
 
     def open_spider(self, spider):
         self.date = date.today()
@@ -33,6 +36,7 @@ class FoodCrawlerPipeline:
         clean_db(self.north_col)
         clean_db(self.south_col)
         self.client.close()
+        logging.info("Closed Firebase session successfuly")
 
     def process_item(self, item, spider):
         # Each food item has a unique ID to prevent any overwriting if both
