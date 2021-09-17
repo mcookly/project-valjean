@@ -19,6 +19,8 @@ class FoodCrawlerPipeline:
         self.client = firestore.client()
         self.north_col = self.client.collection('North')
         self.south_col = self.client.collection('South')
+        self.meals_north = list()
+        self.meals_south = list()
 
     def close_spider(self, spider):
         # Delete any old categories from the previous day
@@ -29,8 +31,19 @@ class FoodCrawlerPipeline:
             for old_cat in old_cats:
                 old_cat.reference.delete()
             logging.info(f"Cleaned {collection.id}")
+
+        def update_meals(meals, collection):
+            logging.info(f"Updating meals for {collection.id}...")
+            collection.document("META-meals").set({
+                'dh': collection.id,
+                'meals': meals
+            })
+            logging.info(f"Updating {collection.id}")
+
         clean_db(self.north_col)
         clean_db(self.south_col)
+        update_meals(self.meals_north, self.north_col)
+        update_meals(self.meals_south, self.south_col)
         self.client.close()
         logging.info("Closed Firebase session successfuly")
 
@@ -39,9 +52,15 @@ class FoodCrawlerPipeline:
         item_dh = item['dining_hall']
         if item_dh == 'North':
             dh_col = self.north_col
+            meals_list = self.meals_north
         elif item_dh == 'South':
             dh_col = self.south_col
+            meals_list = self.meals_south
 
+        # Keep track of meals for each dining hall to read on the web app.
+        if item['meal'] not in meals_list:
+            meals_list.append(item['meal'])
+        
         dh_col.document(item['meal'] + '-' + item['name']).set({
             'name': item['name'],
             'foods': item['foods'],
