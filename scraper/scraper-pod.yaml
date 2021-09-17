@@ -10,6 +10,7 @@ metadata:
   name: scraper
 spec:
   containers:
+      # TODO: change image to officially from artifact registry
     - image: us.gcr.io/project-valjean/scraper-test
       name: scraper
       volumeMounts:
