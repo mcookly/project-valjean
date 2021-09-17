@@ -9,12 +9,8 @@ import logging
 
 class FoodCrawlerPipeline:
     def __init__(self):
-        # Initialize pipeline here
-        try:
-            AUTH_PATH = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
-        except:
-            logging.error("Failed to find service account key!")
-        cred = credentials.Certificate(AUTH_PATH)
+        # This loads the Firebase credentials from the env
+        cred = credentials.ApplicationDefault()
         firebase_admin.initialize_app(cred)
         logging.info("Opened Firebase session successfully")
 
@@ -39,9 +35,7 @@ class FoodCrawlerPipeline:
         logging.info("Closed Firebase session successfuly")
 
     def process_item(self, item, spider):
-        # Each food item has a unique ID to prevent any overwriting if both
-        # DHs have identical foods. Another option would be to use
-        # subcollections.
+        # Items are category collections. See items.py for more details.
         item_dh = item['dining_hall']
         if item_dh == 'North':
             dh_col = self.north_col

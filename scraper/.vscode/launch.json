@@ -5,12 +5,42 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Cloud Run: Run/Debug Locally",
+            "type": "cloudcode.cloudrun",
+            "request": "launch",
+            "build": {
+                "docker": {
+                    "path": "Dockerfile"
+                }
+            },
+            "image": "scraper",
+            "service": {
+                "name": "scraper",
+                "containerPort": 8080,
+                "serviceAccountName": "firebase-adminsdk-ateu0@project-valjean.iam.gserviceaccount.com",
+                "resources": {
+                    "limits": {
+                        "memory": "256Mi",
+                        "cpu": 1
+                    }
+                }
+            },
+            "target": {
+                "minikube": {}
+            },
+            "watch": false
+        },
+        {
             "name": "Python: NDH Spider",
             "type": "python",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["scrapy", "crawl", "ndh"]
+            "args": [
+                "scrapy",
+                "crawl",
+                "ndh"
+            ]
         }
     ]
 }

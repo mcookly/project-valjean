@@ -1,0 +1,6 @@
+# Ignore the following
+.git
+.cache
+.vscode
+.venv
+.yaml
