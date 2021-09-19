@@ -1,3 +1,4 @@
+from datetime import date
 from logging import error
 import firebase_admin, os
 from flask import Flask, send_from_directory, render_template, request, redirect, json
@@ -61,7 +62,7 @@ def select(dh, meal):
         food[cat_dict['name']] = cat_dict['foods']
     app.logger.info(f'Found foods for {meal} at {dh}')
     return render_template('rate/select.html', dh=dh, meal=meal, food_items = food)
-    
+
 @app.route('/rate/rating/<dh>/<meal>/<food>')
 def rating(dh, meal, food):
     food_dict = json.loads(food)
@@ -92,7 +93,37 @@ def record_food_items(dh, meal):
 def submit_ratings(dh, meal):
     # Code for writing to DB goes here.
     rating = request.form.to_dict(flat=False) # Gives # rating per category-food
-    # TODO: split cat-food str and send to DB.
+    app.logger.info(f'Current ratings: {rating}')
+
+    # Send reviews to DB
+    client = get_db()
+    for (name, review) in rating.items():
+        item = client.collection('reviews-' + dh).document(meal + '-' + name)
+        review_num = review[0]
+        if item.get().exists:  
+            item_dict = item.get().to_dict()
+            likes = item_dict['likes']
+            dislikes = item_dict['dislikes']
+            if int(review_num):
+                dislikes += 1
+            else:
+                likes += 1
+        else:
+            if int(review_num):
+                dislikes = 1
+                likes = 0
+            else:
+                dislikes = 0
+                likes = 1 
+
+        item.set({
+            'name': name,
+            'date': date.today().strftime('%Y-%m-%d'),
+            'meal': meal,
+            'likes': likes,
+            'dislikes': dislikes
+        })
+
     return redirect(url_for('submitted', dh=dh, meal=meal))
 
 ########### Stats
