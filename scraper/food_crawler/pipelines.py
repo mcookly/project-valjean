@@ -61,7 +61,7 @@ class FoodCrawlerPipeline:
         if item['meal'] not in meals_list:
             meals_list.append(item['meal'])
         
-        dh_col.document(item['meal'] + '-' + item['name']).set({
+        dh_col.document(item['meal'] + '/' + item['name']).set({
             'name': item['name'],
             'foods': item['foods'],
             'date': str(self.date),
