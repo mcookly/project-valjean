@@ -1,3 +1,4 @@
+from logging import error
 import firebase_admin, os
 from flask import Flask, send_from_directory, render_template, request, redirect, json
 from flask.helpers import url_for
@@ -5,6 +6,19 @@ from firebase_admin import credentials, firestore
 
 # This line initiates the Flask app
 app = Flask(__name__)
+
+# Get DB
+def get_db():
+    cred = credentials.ApplicationDefault()
+    try:
+        firebase_admin.initialize_app(cred)
+    except:
+        # Firebase will throw an error if app is already initialized
+        app.logger.info('Firebase app already initialized')
+    app.logger.info("Opened Firebase session successfully")
+
+    client = firestore.client()
+    return client
 
 ########### Index
 @app.route('/')
@@ -24,28 +38,30 @@ def meal(dh):
         return redirect(url_for('missing_data', data=dh))
     else:
         # Initialize database
-        cred = credentials.ApplicationDefault()
-        try:
-            firebase_admin.initialize_app(cred)
-        except:
-            # Firebase will throw an error if app is already initialized
-            app.logger.info('Firebase app already initialized')
-        app.logger.info("Opened Firebase session successfully")
-
-        client = firestore.client()
+        client = get_db()
         try:
             meta_meals = client.collection('foods-' + dh).document('META-meals').get()
             meals = meta_meals.to_dict()['meals']
             app.logger.info(f"Found meal list for {dh}: {meals}")
+
+            if len(meals) == 0:
+                raise ImportError('Meal list returned empty')
         except:
             return redirect(url_for('missing_data'), meals)
 
         return render_template('rate/meal.html', dh=dh, meals=meals)
-        
+
 @app.route('/rate/<dh>/<meal>/select/')
 def select(dh, meal):
-    food = {'Grill': ['Gluten Free Hamburger Buns', 'Char-Grilled Chicken Breast', 'Crispy Chicken Patty', 'Hot Dog Buns', 'Beef and Mushroom Burger'], 'Pizzeria': ['Sausage Pizza', 'Cheese Pizza', 'Pepperoni Pizza']} # TODO: replace with SQL data
+    food = dict()
+    client = get_db()
+    food_cats = client.collection('foods-' + dh).where('meal', '==', meal).stream()
+    for cat in food_cats:
+        cat_dict = cat.to_dict()
+        food[cat_dict['name']] = cat_dict['foods']
+    app.logger.info(f'Found foods for {meal} at {dh}')
     return render_template('rate/select.html', dh=dh, meal=meal, food_items = food)
+    
 @app.route('/rate/rating/<dh>/<meal>/<food>')
 def rating(dh, meal, food):
     food_dict = json.loads(food)
