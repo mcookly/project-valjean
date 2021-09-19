@@ -17,8 +17,8 @@ class FoodCrawlerPipeline:
     def open_spider(self, spider):
         self.date = date.today()
         self.client = firestore.client()
-        self.north_col = self.client.collection('North')
-        self.south_col = self.client.collection('South')
+        self.north_col = self.client.collection('foods-North')
+        self.south_col = self.client.collection('foods-South')
         self.meals_north = list()
         self.meals_south = list()
 
@@ -61,7 +61,7 @@ class FoodCrawlerPipeline:
         if item['meal'] not in meals_list:
             meals_list.append(item['meal'])
         
-        dh_col.document(item['meal'] + '/' + item['name']).set({
+        dh_col.document(item['meal'] + '-' + item['name']).set({
             'name': item['name'],
             'foods': item['foods'],
             'date': str(self.date),
