@@ -21,6 +21,10 @@ def get_db():
     client = firestore.client()
     return client
 
+def close_db(client):
+    client.close()
+    app.logger.info("Closed Firebase session successfuly")
+
 ########### Index
 @app.route('/')
 def index():
@@ -93,7 +97,6 @@ def record_food_items(dh, meal):
 def submit_ratings(dh, meal):
     # Code for writing to DB goes here.
     rating = request.form.to_dict(flat=False) # Gives # rating per category-food
-    app.logger.info(f'Current ratings: {rating}')
 
     # Send reviews to DB
     client = get_db()
@@ -124,6 +127,7 @@ def submit_ratings(dh, meal):
             'dislikes': dislikes
         })
 
+    close_db(client)
     return redirect(url_for('submitted', dh=dh, meal=meal))
 
 ########### Stats
