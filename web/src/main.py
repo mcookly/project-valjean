@@ -1,7 +1,7 @@
-import os
+import firebase_admin, os
 from flask import Flask, send_from_directory, render_template, request, redirect, json
 from flask.helpers import url_for
-
+from firebase_admin import credentials, firestore
 
 # This line initiates the Flask app
 app = Flask(__name__)
@@ -23,8 +23,25 @@ def meal(dh):
     if dh not in ('South', 'North'):
         return redirect(url_for('missing_data', data=dh))
     else:
-        meals = ['Breakfast', 'Lunch', 'Dinner'] # TODO: replace with SQL data
+        # Initialize database
+        cred = credentials.ApplicationDefault()
+        try:
+            firebase_admin.initialize_app(cred)
+        except:
+            # Firebase will throw an error if app is already initialized
+            app.logger.info('Firebase app already initialized')
+        app.logger.info("Opened Firebase session successfully")
+
+        client = firestore.client()
+        try:
+            meta_meals = client.collection('foods-' + dh).document('META-meals').get()
+            meals = meta_meals.to_dict()['meals']
+            app.logger.info(f"Found meal list for {dh}: {meals}")
+        except:
+            return redirect(url_for('missing_data'), meals)
+
         return render_template('rate/meal.html', dh=dh, meals=meals)
+        
 @app.route('/rate/<dh>/<meal>/select/')
 def select(dh, meal):
     food = {'Grill': ['Gluten Free Hamburger Buns', 'Char-Grilled Chicken Breast', 'Crispy Chicken Patty', 'Hot Dog Buns', 'Beef and Mushroom Burger'], 'Pizzeria': ['Sausage Pizza', 'Cheese Pizza', 'Pepperoni Pizza']} # TODO: replace with SQL data
