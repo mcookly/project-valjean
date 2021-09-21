@@ -23,13 +23,13 @@ SPLASH_URL = 'http://localhost:8050'
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'Project Valjean (+http://www.yourdomain.com)'
+USER_AGENT = 'Project Valjean (https://projectvaljean.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
 # Log level (change as needed)
-LOG_LEVEL = 'WARNING'
+LOG_LEVEL = 'INFO'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # NOTE: Must be kept at one for Scrapy-Splash to function properly.
