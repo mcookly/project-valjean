@@ -3,8 +3,8 @@ kind: CronJob
 metadata:
   name: scraper-cron
 spec:
-  # Should run every day at 2 AM Eastern time.
-  schedule: CRON_TZ=America/New_york "0 2 * * *"
+  # Should run every day at 2 AM Eastern time (6 AM UTC).
+  schedule: 0 6 * * *
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -31,4 +31,4 @@ spec:
               secretName: firebase-io
           restartPolicy: Never
           imagePullSecrets:
-                - name: gcr-io
+                - name: gar-io
