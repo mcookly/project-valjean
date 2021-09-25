@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scraper-cron
+spec:
+  # Should run every day at 2 AM Eastern time.
+  schedule: CRON_TZ=America/New_york "0 2 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: scraper
+        spec:
+          containers:
+              # TODO: change image to officially from artifact registry
+            - image: us.gcr.io/project-valjean/scraper-test
+              name: scraper
+              volumeMounts:
+                - name: secret
+                  mountPath: etc/secret
+                  readOnly: true
+              env:
+                - name: GOOGLE_APPLICATION_CREDENTIALS
+                  value: /etc/secret/firebase-io.json
+              resources: {}
+          volumes:
+          - name: secret
+            secret:
+              secretName: firebase-io
+          restartPolicy: Never
+          imagePullSecrets:
+                - name: gcr-io

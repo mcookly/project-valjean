@@ -1,5 +1,5 @@
-apiVersion: v1
-kind: Pod
+apiVersion: v1 # v1
+kind: Pod # Pod
 metadata:
   annotations:
     kompose.cmd: kompose convert
@@ -27,5 +27,5 @@ spec:
       secretName: firebase-io
   imagePullSecrets:
     - name: gcr-io
-  restartPolicy: OnFailure
+  restartPolicy: Never
 status: {}
