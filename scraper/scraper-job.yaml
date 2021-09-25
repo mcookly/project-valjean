@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
               # TODO: change image to officially from artifact registry
-            - image: us.gcr.io/project-valjean/scraper-test
+            - image: us-central1-docker.pkg.dev/project-valjean/scraper/scraper:v0.9.0
               name: scraper
               volumeMounts:
                 - name: secret

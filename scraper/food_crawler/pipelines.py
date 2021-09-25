@@ -32,18 +32,18 @@ class FoodCrawlerPipeline:
                 old_cat.reference.delete()
             logging.info(f"Cleaned {collection.id}")
 
-        def update_meals(meals, collection):
+        def update_meals(meals, collection, name):
             logging.info(f"Updating meals for {collection.id}...")
             collection.document("META-meals").set({
-                'dh': collection.id,
+                'dh': name,
                 'meals': meals
             })
             logging.info(f"Updating {collection.id}")
 
         clean_db(self.north_col)
         clean_db(self.south_col)
-        update_meals(self.meals_north, self.north_col)
-        update_meals(self.meals_south, self.south_col)
+        update_meals(self.meals_north, self.north_col, 'North')
+        update_meals(self.meals_south, self.south_col, 'South')
         self.client.close()
         logging.info("Closed Firebase session successfuly")
 
