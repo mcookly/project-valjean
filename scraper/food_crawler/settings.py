@@ -1,3 +1,5 @@
+import os
+
 # Scrapy settings for food_crawler project
 #
 # For simplicity, this file contains only settings considered important or
@@ -15,7 +17,7 @@ NEWSPIDER_MODULE = 'food_crawler.spiders'
 # Splash integration
 
 # Production / isolated development
-SPLASH_URL = 'http://localhost:8050'
+SPLASH_URL = "http://" + os.environ.get("SPLASH_IP")
 
 # docker-compose development
 # SPLASH_URL = 'http://splash:8050'
@@ -26,7 +28,7 @@ DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 USER_AGENT = 'Project Valjean (https://projectvaljean.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False # Because ND does not have one on their nutrition page.
 
 # Log level (change as needed)
 LOG_LEVEL = 'INFO'

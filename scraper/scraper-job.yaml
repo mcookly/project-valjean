@@ -24,6 +24,8 @@ spec:
               env:
                 - name: GOOGLE_APPLICATION_CREDENTIALS
                   value: /etc/secret/firebase-io.json
+                - name: SPLASH_IP
+                  value: splash:8050
               resources: {}
           volumes:
           - name: secret
