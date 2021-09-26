@@ -18,6 +18,9 @@ RUN pip install -r requirements.txt
 # Copy source files
 COPY food_crawler/ ./food_crawler
 
+ENV SPLASH_IP="localhost:8050"
+# Use "localhost:8050" for isolated dev and "splash:8050" for production
+
 # Run both SDH and NDH spiders
 CMD ["scrapy", "crawl", "dining_halls"]
 

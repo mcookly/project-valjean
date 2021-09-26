@@ -1,4 +1,4 @@
-apiVersion: batch/v1
+apiVersion: batch/v1beta1 # Needs to be beta for GCP
 kind: CronJob
 metadata:
   name: scraper-cron
@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
               # TODO: change image to officially from artifact registry
-            - image: us-central1-docker.pkg.dev/project-valjean/scraper/scraper:v0.9.0
+            - image: us-central1-docker.pkg.dev/project-valjean/scraper/scraper:v0.9.1
               name: scraper
               volumeMounts:
                 - name: secret

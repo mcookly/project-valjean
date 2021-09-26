@@ -16,11 +16,8 @@ NEWSPIDER_MODULE = 'food_crawler.spiders'
 
 # Splash integration
 
-# Production / isolated development
+# Iolated development
 SPLASH_URL = "http://" + os.environ.get("SPLASH_IP")
-
-# docker-compose development
-# SPLASH_URL = 'http://splash:8050'
 
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
