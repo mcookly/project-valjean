@@ -30,6 +30,12 @@ spec:
           name: splash
           ports:
             - containerPort: 8050
-          resources: {}
+          resources:
+                requests:
+                  memory: 1Gi
+                  cpu: 250m
+                limits:
+                  memory: 2Gi
+                  cpu: 500m
       restartPolicy: Always
 status: {}

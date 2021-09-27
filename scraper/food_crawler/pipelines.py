@@ -9,6 +9,8 @@ import logging
 
 class FoodCrawlerPipeline:
     def __init__(self):
+        # Display target DNS for Splash
+        logging.info('Using "' + os.environ.get('SPLASH_IP') + '" for Splash IP.')
         # This loads the Firebase credentials from the env
         cred = credentials.ApplicationDefault()
         firebase_admin.initialize_app(cred)

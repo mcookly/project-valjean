@@ -14,7 +14,7 @@ try:
         script_nav_to_dh_menu = f.read()
     logging.info('Found Lua script "nav_to_dh_menu" in ' + SCRIPTS_DIR)
 except:
-    logging.error('Could not find Lua script "nav_to_dh_menu" in ' + SCRIPTS_DIR)
+    logging.critical('Could not find Lua script "nav_to_dh_menu" in ' + SCRIPTS_DIR)
 
 ### Load 'record_meal_elements.lua'
 try:
@@ -22,7 +22,7 @@ try:
         script_record_meal_elements = f.read()
     logging.info('Found Lua script "record_meal_elements" in ' + SCRIPTS_DIR)
 except:
-    logging.error('Could not find Lua script "record_meal_elements" in ' + SCRIPTS_DIR)
+    logging.critical('Could not find Lua script "record_meal_elements" in ' + SCRIPTS_DIR)
 
 class DHSPIDER(scrapy.Spider):
     name = "dining_halls"
@@ -32,7 +32,8 @@ class DHSPIDER(scrapy.Spider):
     current_day = date.today().strftime('%A, %B %-d, %Y')
     meals_list = tuple()
     # Page selectors
-    wait_time = 8
+    wait_time = int(os.environ.get('SPIDER_WAIT_TIME'))
+    splash_timeout = int(os.environ.get('SPLASH_TIMEOUT'))
     dining_hall_sel = {
         'South': 'tr.cbo_nn_unitsPrimaryRow:nth-child(5) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)',
         'North': 'tr.cbo_nn_unitsAlternateRow:nth-child(2) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)'
@@ -41,6 +42,7 @@ class DHSPIDER(scrapy.Spider):
 
     def start_requests(self):
         for dh in self.dining_hall_sel.keys():
+            self.logger.info(f'[{dh}]: Beginning first parse...')
             yield SplashRequest(
                 url=self.url,
                 callback=self.parse,
@@ -50,6 +52,7 @@ class DHSPIDER(scrapy.Spider):
                 args={
                     'lua_source': script_nav_to_dh_menu,
                     'wait': self.wait_time,
+                    'timeout': self.splash_timeout,
                     'dh': self.dining_hall_sel[dh],
                     'fwd_btn': self.fwd_btn_sel,
                     })
@@ -64,14 +67,15 @@ class DHSPIDER(scrapy.Spider):
         for i in range(1, 8):
             day = response.css(f'div.cbo_nn_menuTableDiv tr:nth-child({i}) td.cbo_nn_menuCell td::text').get()
             if day == self.current_day:
-                logging.info(f'[{dining_hall}]: Found the current day ({day}) at node index {i}.')
+                self.logger.info(f'[{dining_hall}]: Found the current day ({day}) at node index {i}.')
                 break
         # Get list of meals for the day
         # '//a' is cycling through all child nodes under the current day node.
         self.meals_list = response.xpath(f'//*[@id="MenuList"]/div[2]/table/tbody/tr[{i}]/td/table/tbody/tr[2]/td/table/tbody/tr//a/text()').extract()
-        logging.info(f'[{dining_hall}]: Found {len(self.meals_list)} meal(s): {self.meals_list}')
-        logging.info(f'[{dining_hall}]: Completed first parse')
+        self.logger.info(f'[{dining_hall}]: Found {len(self.meals_list)} meal(s): {self.meals_list}')
+        self.logger.info(f'[{dining_hall}]: Completed first parse')
 
+        self.logger.info(f'[{dining_hall}]: Beginning second parse...')
         yield SplashRequest(
             url=self.url,
             callback=self.parse_meals,
@@ -81,6 +85,7 @@ class DHSPIDER(scrapy.Spider):
             args={
                 'lua_source': script_record_meal_elements,
                 'wait': self.wait_time,
+                'timeout': self.splash_timeout,
                 'dh': self.dining_hall_sel[dining_hall],
                 'fwd_btn': self.fwd_btn_sel,
                 'index': i,
@@ -125,4 +130,4 @@ class DHSPIDER(scrapy.Spider):
                             yield cat_item
                             break # Stop at next category
 
-        logging.info(f'[{response.meta.get("dh")}]: Completed second parse')
+        self.logger.info(f'[{response.meta.get("dh")}]: Completed second parse')
