@@ -32,7 +32,7 @@ class DHSPIDER(scrapy.Spider):
     current_day = date.today().strftime('%A, %B %-d, %Y')
     meals_list = tuple()
     # Page selectors
-    wait_time = 2
+    wait_time = 8
     dining_hall_sel = {
         'South': 'tr.cbo_nn_unitsPrimaryRow:nth-child(5) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)',
         'North': 'tr.cbo_nn_unitsAlternateRow:nth-child(2) > td:nth-child(1) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(1)'
