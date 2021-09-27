@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
               # TODO: change image to officially from artifact registry
-            - image: us-central1-docker.pkg.dev/project-valjean/scraper/scraper:v0.9.1
+            - image: us-central1-docker.pkg.dev/project-valjean/scraper/scraper:v0.9.2
               name: scraper
               volumeMounts:
                 - name: secret
@@ -24,8 +24,6 @@ spec:
               env:
                 - name: GOOGLE_APPLICATION_CREDENTIALS
                   value: /etc/secret/firebase-io.json
-                - name: SPLASH_IP
-                  value: splash:8050
               resources: {}
           volumes:
           - name: secret

@@ -16,8 +16,7 @@ NEWSPIDER_MODULE = 'food_crawler.spiders'
 
 # Splash integration
 
-# Iolated development
-SPLASH_URL = "http://" + os.environ.get("SPLASH_IP")
+SPLASH_URL = 'http://splash:8050'
 
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
