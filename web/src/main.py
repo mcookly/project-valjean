@@ -60,12 +60,15 @@ def meal(dh):
 @app.route('/rate/<dh>/<meal>/select/')
 def select(dh, meal):
     food = dict()
-    client = get_db()
-    food_cats = client.collection('foods-' + dh).where('meal', '==', meal).stream()
-    for cat in food_cats:
-        cat_dict = cat.to_dict()
-        food[cat_dict['name']] = cat_dict['foods']
-    app.logger.info(f'Found foods for {meal} at {dh}')
+    try:
+        client = get_db()
+        food_cats = client.collection('foods-' + dh).where('meal', '==', meal).stream()
+        for cat in food_cats:
+            cat_dict = cat.to_dict()
+            food[cat_dict['name']] = cat_dict['foods']
+        app.logger.info(f'Found foods for {meal} at {dh}')
+    except:
+        return redirect(url_for('missing_data'), f'Foods for {meal} at {dh} Dinig Hall')
     return render_template('rate/select.html', dh=dh, meal=meal, food_items = food)
 
 @app.route('/rate/rating/<dh>/<meal>/<food>')
