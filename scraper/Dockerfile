@@ -1,23 +1,24 @@
-#Pull from Splash as the base image
-FROM python:3.9.6
+FROM python:3.9.6-slim
+# NOTE: python-slim may ~not~ be the most optimal image, but it doesn't
+# seem to break anything right now, so let's keep using it.
 
-#Install needed packages
-RUN apt-get update -y
+# Update system
+RUN apt-get update -y && apt-get clean
 
-#Set the working directory
+# Set the working directory
 WORKDIR /code
 
-# Copy files
-COPY requirements.txt .
-COPY food_crawler/ ./food_crawler
-COPY scrapy.cfg .
+# Copy configs
+COPY scrapy.cfg /code/scrapy.cfg
+COPY requirements.txt /code/requirements.txt
 
-# Install all the dependencies (including the custom module)
-RUN pip install -r requirements.txt && \
-    pip install ./food_crawler/foodhandler
+# Install all the dependencies
+RUN pip install -r requirements.txt
+
+# Copy source files
+COPY food_crawler/ ./food_crawler
 
 # Run both SDH and NDH spiders
-CMD ["food_crawler/crawl.py"]
-ENTRYPOINT ["python3"]
+CMD ["scrapy", "crawl", "dining_halls"]
 
-# NOTE: make sure to name the image 'crawler'
+# NOTE: make sure to name the image 'scraper'

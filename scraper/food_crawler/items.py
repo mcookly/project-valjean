@@ -5,8 +5,16 @@
 
 import scrapy
 
+class FoodItem(scrapy.Item):
+    # Individual food items
+    dining_hall = scrapy.Field()
+    meal = scrapy.Field()
+    category = scrapy.Field()
+    name = scrapy.Field()
 
-class FoodCrawlerItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class FoodCategory(scrapy.Item):
+    # Organize by category
+    foods = scrapy.Field()
+    dining_hall = scrapy.Field()
+    meal = scrapy.Field()
+    name = scrapy.Field()

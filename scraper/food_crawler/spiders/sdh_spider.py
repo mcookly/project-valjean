@@ -2,7 +2,6 @@ import os
 import logging
 import scrapy
 from datetime import date
-from foodhandler import parse_tools, communicator
 from scrapy_splash.request import SplashRequest
 
 ### Load Lua scripts ###

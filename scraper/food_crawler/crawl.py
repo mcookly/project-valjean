@@ -6,15 +6,16 @@ from twisted.internet import defer, reactor
 # NOTE: from here -
 # https://doc.scrapy.org/en/latest/topics/practices.html#running-multiple-spiders-in-the-same-process
 
-# Run the spiders on different processes, sequentially
+# Run the spiders on different processes, sequentially.
+# Hopefully this will prevent Splash from getting confused.
 configure_logging()
 runner = CrawlerRunner(get_project_settings())
 
 # Something that has to do with Twisted
 @defer.inlineCallbacks
 def crawl():
-    yield runner.crawl('sdh')
-    yield runner.crawl('ndh')
+    yield runner.crawl('North')
+    yield runner.crawl('dining_halls')
     reactor.stop()
 
 # Execute

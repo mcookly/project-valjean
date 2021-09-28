@@ -1,3 +1,5 @@
+import os
+
 # Scrapy settings for food_crawler project
 #
 # For simplicity, this file contains only settings considered important or
@@ -13,22 +15,23 @@ SPIDER_MODULES = ['food_crawler.spiders']
 NEWSPIDER_MODULE = 'food_crawler.spiders'
 
 # Splash integration
-# Change to "splash" for build and "localhost" for focused debugging?
-# localhost seems to work with Docker Compose now...
-SPLASH_URL = 'http://splash:8050'
+
+SPLASH_URL = 'http://' + os.environ.get('SPLASH_IP')
+
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'Project Valjean (+http://www.yourdomain.com)'
+USER_AGENT = 'Project Valjean (https://projectvaljean.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False # Because ND does not have one on their nutrition page.
 
 # Log level (change as needed)
 LOG_LEVEL = 'INFO'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+# NOTE: Must be kept at one for Scrapy-Splash to function properly.
+CONCURRENT_REQUESTS = 1
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -42,7 +45,7 @@ LOG_LEVEL = 'INFO'
 COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
-#TELNETCONSOLE_ENABLED = False
+TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
 #DEFAULT_REQUEST_HEADERS = {
@@ -74,9 +77,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'food_crawler.pipelines.FoodCrawlerPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'food_crawler.pipelines.FoodCrawlerPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
