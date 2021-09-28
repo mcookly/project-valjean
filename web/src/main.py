@@ -1,10 +1,30 @@
-import os
+from datetime import date
+from logging import error
+import logging
+import firebase_admin, os
 from flask import Flask, send_from_directory, render_template, request, redirect, json
 from flask.helpers import url_for
-
+from firebase_admin import credentials, firestore
 
 # This line initiates the Flask app
 app = Flask(__name__)
+
+# Get DB
+def get_db():
+    cred = credentials.ApplicationDefault()
+    try:
+        firebase_admin.initialize_app(cred)
+    except:
+        # Firebase will throw an error if app is already initialized
+        app.logger.info('Firebase app already initialized')
+    app.logger.info("Opened Firebase session successfully")
+
+    client = firestore.client()
+    return client
+
+def close_db(client):
+    client.close()
+    app.logger.info("Closed Firebase session successfuly")
 
 ########### Index
 @app.route('/')
@@ -20,14 +40,37 @@ def dininghall():
     return render_template('rate/dininghall.html')
 @app.route('/rate/<dh>/meal/') # Select the meal
 def meal(dh):
-    if dh not in ('sdh', 'ndh'):
+    if dh not in ('South', 'North'):
         return redirect(url_for('missing_data', data=dh))
-    meals = ['Brunch', 'Dinner'] # TODO: replace with SQL data
-    return render_template('rate/meal.html', dh=dh, meals=meals)
+    else:
+        # Initialize database
+        client = get_db()
+        try:
+            meta_meals = client.collection('foods-' + dh).document('META-meals').get()
+            meals = meta_meals.to_dict()['meals']
+            app.logger.info(f"Found meal list for {dh}: {meals}")
+
+            if len(meals) == 0:
+                raise ImportError('Meal list returned empty')
+        except:
+            return redirect(url_for('missing_data'), meals)
+
+        return render_template('rate/meal.html', dh=dh, meals=meals)
+
 @app.route('/rate/<dh>/<meal>/select/')
 def select(dh, meal):
-    food = {'Beans': ['apple', 'pear', 'salmon'], 'Juice': ['cider', 'banana', 'tuna']} # TODO: replace with SQL data
+    food = dict()
+    try:
+        client = get_db()
+        food_cats = client.collection('foods-' + dh).where('meal', '==', meal).stream()
+        for cat in food_cats:
+            cat_dict = cat.to_dict()
+            food[cat_dict['name']] = cat_dict['foods']
+        app.logger.info(f'Found foods for {meal} at {dh}')
+    except:
+        return redirect(url_for('missing_data'), f'Foods for {meal} at {dh} Dinig Hall')
     return render_template('rate/select.html', dh=dh, meal=meal, food_items = food)
+
 @app.route('/rate/rating/<dh>/<meal>/<food>')
 def rating(dh, meal, food):
     food_dict = json.loads(food)
@@ -56,10 +99,54 @@ def record_food_items(dh, meal):
 ########### Writes ratings to DB
 @app.route('/session/<dh>/<meal>/submit', methods=['POST'])
 def submit_ratings(dh, meal):
-    # Code for writing to DB goes here.
-    rating = request.form.to_dict(flat=False) # Gives # rating per category-food
-    # TODO: split cat-food str and send to DB.
-    return redirect(url_for('submitted', dh=dh, meal=meal))
+
+    def clean_name(dirty_name: str):
+        # Cleans the category from the name
+        try:
+            cat_index = dirty_name.index('90909') + 5
+            clean_name = dirty_name[cat_index:]
+        except:
+            app.logger.error(f'Could not clean "{dirty_name}"')
+            return dirty_name
+        return clean_name
+
+    try:
+        # Code for writing to DB goes here.
+        rating = request.form.to_dict(flat=False) # Gives # rating per category-food
+
+        # Send reviews to DB
+        client = get_db()
+        for (d_name, review) in rating.items():
+            name = clean_name(d_name)
+            item = client.collection('reviews-' + dh).document(meal + '-' + name)
+            review_num = review[0]
+            if item.get().exists:  
+                item_dict = item.get().to_dict()
+                likes = item_dict['likes']
+                dislikes = item_dict['dislikes']
+                if int(review_num):
+                    likes += 1
+                else:
+                    dislikes += 1
+            else:
+                if int(review_num):
+                    dislikes = 0
+                    likes = 1
+                else:
+                    dislikes = 1
+                    likes = 0
+
+            item.set({
+                'name': name,
+                'date': date.today().strftime('%Y-%m-%d'),
+                'meal': meal,
+                'likes': likes,
+                'dislikes': dislikes
+            })
+        close_db(client)
+        return redirect(url_for('submitted', dh=dh, meal=meal))
+    except:
+        return redirect(url_for('missing_data', data='your ratings'))
 
 ########### Stats
 @app.route('/stats/')
@@ -78,11 +165,15 @@ def favicon():
         os.path.join(app.root_path, 'static/img/favicon'),
         'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-########### Error page for missing fata
+########### Error page for missing data
 @app.route('/error/missing-<data>')
 def missing_data(data):
     return render_template('error/missing-data.html', data=data)
 
+########### Error page for failed submission
+@app.route('/error/<dh>/<meal>/failed-to-submit')
+def failed_to_submit(dh, meal):
+    return render_template('error/failed-to-submit.html', dh=dh, meal=meal)
 
 ########### Error handling for missing pages
 @app.errorhandler(404)

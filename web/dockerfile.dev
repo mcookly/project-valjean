@@ -1,10 +1,4 @@
-#Create an ubuntu base image with python 3 installed.
-FROM ubuntu:20.04
-
-#Install needed packages
-RUN set -xe \
-&& apt-get update -y \
-&& apt-get install -y python3-pip
+FROM python:3.9-slim
 
 #Set the working directory
 WORKDIR /code
@@ -22,7 +16,7 @@ COPY src/ .
 ENV FLASK_APP=main.py
 
 #Expose the required port
-EXPOSE 5000
+EXPOSE 8080
 
 #Run the command
 # NOTE: '--host=0.0.0.0' is only being used to expose Flask outside Docker.
