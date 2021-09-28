@@ -42,7 +42,10 @@ Actually configuring the two pods to run on GCP presented the most significant c
 
 ---
 ### What's left...
-There is still much to be done—making the statistics page, running the Kubernetes cluster on GKE, and importing food items into the app from the database, for instance. Unfortunately, both of us have started school again, so progress will slow down for now. We plan to be back in full swing this December.
+- ✅ Get the scraper on GCP
+- ✅ Have the website read and write to DB
+- ❌ Make the statistics page
+- ❌ Clean code and add better logging and error-prevention
 
 ### Screenshots (iPhone X)
 #### Home
