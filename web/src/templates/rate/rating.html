@@ -12,6 +12,7 @@
             // Add item to rated list
             if (!rated.includes(name)) {
                 rated.push(name);
+                console.log("Added " + name);
             }
             
             // Change thumbs up/down color on active radion btn.
@@ -47,12 +48,12 @@
         <div class="flex-row form-padding">
             <!-- name = dict key, value = dict value -->
             <!-- Thumbs down -->
-            <input class="btn-check" type="radio" value="0" id="{{ cat }}-{{ food_item }}-down" name="{{cat}}-{{ food_item }}" autocomplete="off">
+            <input class="btn-check" type="radio" value="0" id="{{ cat }}-{{ food_item }}-down" name="{{cat}}90909{{ food_item }}" autocomplete="off">
             <label id="label-{{ cat }}-{{ food_item }}-down" class="btn btn-rate btn-outline-secondary" for="{{ cat }}-{{ food_item }}-down">
                 <i class="bi bi-hand-thumbs-down"></i>
             </label>
             <!-- Thumbs up -->
-            <input class="btn-check" type="radio" value="1" id="{{ cat }}-{{ food_item }}-up" name="{{cat}}-{{ food_item }}" autocomplete="off">
+            <input class="btn-check" type="radio" value="1" id="{{ cat }}-{{ food_item }}-up" name="{{cat}}90909{{ food_item }}" autocomplete="off">
             <label id="label-{{ cat }}-{{ food_item }}-up" class="btn btn-rate btn-outline-secondary" for="{{ cat }}-{{ food_item }}-up">
                 <i class="bi bi-hand-thumbs-up"></i>
             </label>

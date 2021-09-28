@@ -1,5 +1,6 @@
 from datetime import date
 from logging import error
+import logging
 import firebase_admin, os
 from flask import Flask, send_from_directory, render_template, request, redirect, json
 from flask.helpers import url_for
@@ -95,12 +96,24 @@ def record_food_items(dh, meal):
 ########### Writes ratings to DB
 @app.route('/session/<dh>/<meal>/submit', methods=['POST'])
 def submit_ratings(dh, meal):
+
+    def clean_name(dirty_name: str):
+        # Cleans the category from the name
+        try:
+            cat_index = dirty_name.index('90909') + 5
+            clean_name = dirty_name[cat_index:]
+        except:
+            app.logger.error(f'Could not clean "{dirty_name}"')
+            return dirty_name
+        return clean_name
+
     # Code for writing to DB goes here.
     rating = request.form.to_dict(flat=False) # Gives # rating per category-food
 
     # Send reviews to DB
     client = get_db()
-    for (name, review) in rating.items():
+    for (d_name, review) in rating.items():
+        name = clean_name(d_name)
         item = client.collection('reviews-' + dh).document(meal + '-' + name)
         review_num = review[0]
         if item.get().exists:  
@@ -108,16 +121,16 @@ def submit_ratings(dh, meal):
             likes = item_dict['likes']
             dislikes = item_dict['dislikes']
             if int(review_num):
-                dislikes += 1
-            else:
                 likes += 1
+            else:
+                dislikes += 1
         else:
             if int(review_num):
+                dislikes = 0
+                likes = 1
+            else:
                 dislikes = 1
                 likes = 0
-            else:
-                dislikes = 0
-                likes = 1 
 
         item.set({
             'name': name,
