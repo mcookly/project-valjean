@@ -27,16 +27,12 @@ spec:
                 - name: SPLASH_IP
                   value: splash:8050
                 - name: SPIDER_WAIT_TIME
-                  value: 5
+                  value: "5"
                 - name: SPLASH_TIMEOUT
-                  value: 3600
-              resources:
-                requests:
-                  memory: 1Gi
-                  cpu: 250m
-                limits:
-                  memory: 2Gi
-                  cpu: 500m
+                  value: "300"
+              command: ["python3", "/app/bin/splash", "--proxy-profiles-path", "/etc/splash/proxy-profiles", "--js-profiles-path", "/etc/splash/js-profiles", "--filters-path", "/etc/splash/filters", "--lua-package-path", "/etc/splash/lua_modules/?.lua"]
+              args: ["--max-timeout", "3600"]
+              resources: {}
           volumes:
           - name: secret
             secret:
