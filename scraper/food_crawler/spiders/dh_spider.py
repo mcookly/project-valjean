@@ -1,8 +1,14 @@
 import os, logging, scrapy
+import google.cloud.logging
 from datetime import date
 from food_crawler.items import FoodCategory
 from scrapy_splash.request import SplashRequest
 from scrapy.selector import Selector
+
+### Open GCP logging client ###
+gcp_log_client = google.cloud.logging.Client()
+gcp_log_client.get_default_handler()
+gcp_log_client.setup_logging()
 
 ### Load Lua scripts ###
 CUR_DIR = os.getcwd()
