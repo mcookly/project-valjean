@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% set active_page = "Error" %}
+{% block content %}
+<div class="text-center">
+    <h1>Well, this is awkward...</h1>
+    <p>For some reason, we weren't able to record or process your rating for 
+        <b>{{ meal }}</b> at 
+        <b>{{ dh }} Dining Hall</b>.
+        <a href="{{ url_for('select', dh=dh, meal=meal) }}" style="color: #b23cfd;">Try again?</a></p>
+</div>
+{% endblock %}

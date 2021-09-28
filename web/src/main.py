@@ -107,41 +107,43 @@ def submit_ratings(dh, meal):
             return dirty_name
         return clean_name
 
-    # Code for writing to DB goes here.
-    rating = request.form.to_dict(flat=False) # Gives # rating per category-food
+    try:
+        # Code for writing to DB goes here.
+        rating = request.form.to_dict(flat=False) # Gives # rating per category-food
 
-    # Send reviews to DB
-    client = get_db()
-    for (d_name, review) in rating.items():
-        name = clean_name(d_name)
-        item = client.collection('reviews-' + dh).document(meal + '-' + name)
-        review_num = review[0]
-        if item.get().exists:  
-            item_dict = item.get().to_dict()
-            likes = item_dict['likes']
-            dislikes = item_dict['dislikes']
-            if int(review_num):
-                likes += 1
+        # Send reviews to DB
+        client = get_db()
+        for (d_name, review) in rating.items():
+            name = clean_name(d_name)
+            item = client.collection('reviews-' + dh).document(meal + '-' + name)
+            review_num = review[0]
+            if item.get().exists:  
+                item_dict = item.get().to_dict()
+                likes = item_dict['likes']
+                dislikes = item_dict['dislikes']
+                if int(review_num):
+                    likes += 1
+                else:
+                    dislikes += 1
             else:
-                dislikes += 1
-        else:
-            if int(review_num):
-                dislikes = 0
-                likes = 1
-            else:
-                dislikes = 1
-                likes = 0
+                if int(review_num):
+                    dislikes = 0
+                    likes = 1
+                else:
+                    dislikes = 1
+                    likes = 0
 
-        item.set({
-            'name': name,
-            'date': date.today().strftime('%Y-%m-%d'),
-            'meal': meal,
-            'likes': likes,
-            'dislikes': dislikes
-        })
-
-    close_db(client)
-    return redirect(url_for('submitted', dh=dh, meal=meal))
+            item.set({
+                'name': name,
+                'date': date.today().strftime('%Y-%m-%d'),
+                'meal': meal,
+                'likes': likes,
+                'dislikes': dislikes
+            })
+        close_db(client)
+        return redirect(url_for('submitted', dh=dh, meal=meal))
+    except:
+        return redirect(url_for('missing_data', data='your ratings'))
 
 ########### Stats
 @app.route('/stats/')
@@ -160,11 +162,15 @@ def favicon():
         os.path.join(app.root_path, 'static/img/favicon'),
         'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-########### Error page for missing fata
+########### Error page for missing data
 @app.route('/error/missing-<data>')
 def missing_data(data):
     return render_template('error/missing-data.html', data=data)
 
+########### Error page for failed submission
+@app.route('/error/<dh>/<meal>/failed-to-submit')
+def failed_to_submit(dh, meal):
+    return render_template('error/failed-to-submit.html', dh=dh, meal=meal)
 
 ########### Error handling for missing pages
 @app.errorhandler(404)
