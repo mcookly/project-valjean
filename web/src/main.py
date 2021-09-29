@@ -1,6 +1,6 @@
 from datetime import date
 import firebase_admin, os
-from flask import Flask, send_from_directory, render_template, request, redirect, json, escape
+from flask import Flask, send_from_directory, render_template, request, redirect, json
 from flask.helpers import url_for
 from firebase_admin import credentials, firestore
 
@@ -116,16 +116,19 @@ def submit_ratings(dh, meal):
         client = get_db()
         for (d_name, review) in rating.items():
             name = clean_name(d_name)
-            item = client.collection('reviews-' + dh).document(meal + '-' + name)
+            item = client.collection('reviews-' + dh).document(name)
             review_num = review[0]
             if item.get().exists:  
                 item_dict = item.get().to_dict()
                 likes = item_dict['likes']
                 dislikes = item_dict['dislikes']
+                meals = item_dict['meals']
                 if int(review_num):
                     likes += 1
                 else:
                     dislikes += 1
+                if meal not in meals:
+                    meals.append(meal)
             else:
                 if int(review_num):
                     dislikes = 0
@@ -133,11 +136,12 @@ def submit_ratings(dh, meal):
                 else:
                     dislikes = 1
                     likes = 0
+                meals = [meal]
 
             item.set({
                 'name': name,
                 'date': date.today().strftime('%Y-%m-%d'),
-                'meal': meal,
+                'meals': sorted(meals),
                 'likes': likes,
                 'dislikes': dislikes
             })
