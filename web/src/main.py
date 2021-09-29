@@ -1,8 +1,6 @@
 from datetime import date
-from logging import error
-import logging
 import firebase_admin, os
-from flask import Flask, send_from_directory, render_template, request, redirect, json
+from flask import Flask, send_from_directory, render_template, request, redirect, json, escape
 from flask.helpers import url_for
 from firebase_admin import credentials, firestore
 

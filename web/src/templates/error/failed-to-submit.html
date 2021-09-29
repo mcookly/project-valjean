@@ -6,6 +6,7 @@
     <p>For some reason, we weren't able to record or process your rating for 
         <b>{{ meal }}</b> at 
         <b>{{ dh }} Dining Hall</b>.
-        <a href="{{ url_for('select', dh=dh, meal=meal) }}" style="color: #b23cfd;">Try again?</a></p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfkia_lQ5ZT0wl0PGfEzXqD7iymzLES1wkS923qzwOZOHfheA/viewform?usp=sf_link">Submit a bug.</a>
+         <a href="{{ url_for('select', dh=dh, meal=meal) }}">Try again?</a></p>
 </div>
 {% endblock %}

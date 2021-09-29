@@ -19,12 +19,12 @@
             console.log("Clicked " + this.id); // debug
             if(value === "0") {
                 // Thumbs down
-                $("#label-" + name + "-down").attr("style", "color: white");
-                $("#label-" + name + "-up").removeAttr("style", "color:white");
+                $("label[id='label-" + name + "-down'").attr("style", "color: white");
+                $("label[id='label-" + name + "-up'").removeAttr("style", "color:white");
             } else {
                 // Thumbs up
-                $("#label-" + name + "-up").attr("style", "color: white");
-                $("#label-" + name + "-down").removeAttr("style", "color:white");
+                $("label[id='label-" + name + "-up'").attr("style", "color: white");
+                $("label[id='label-" + name + "-down'").removeAttr("style", "color:white");
             }
             
             // If rated list equals number of items to rate, then enable
@@ -48,7 +48,7 @@
         <div class="flex-row form-padding">
             <!-- name = dict key, value = dict value -->
             <!-- Thumbs down -->
-            <input class="btn-check" type="radio" value="0" id="{{ cat }}-{{ food_item }}-down" name="{{cat}}90909{{ food_item }}" autocomplete="off">
+            <input class="btn-check" type="radio" value="0" id="{{ cat }}-{{ food_item }}-down" name="{{ cat }}90909{{ food_item }}" autocomplete="off">
             <label id="label-{{ cat }}-{{ food_item }}-down" class="btn btn-rate btn-outline-secondary" for="{{ cat }}-{{ food_item }}-down">
                 <i class="bi bi-hand-thumbs-down"></i>
             </label>
