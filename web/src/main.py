@@ -1,6 +1,4 @@
 from datetime import date
-from logging import error
-import logging
 import firebase_admin, os
 from flask import Flask, send_from_directory, render_template, request, redirect, json
 from flask.helpers import url_for
@@ -53,7 +51,7 @@ def meal(dh):
             if len(meals) == 0:
                 raise ImportError('Meal list returned empty')
         except:
-            return redirect(url_for('missing_data'), meals)
+            return redirect(url_for('missing_data'), data=meals)
 
         return render_template('rate/meal.html', dh=dh, meals=meals)
 
@@ -68,7 +66,7 @@ def select(dh, meal):
             food[cat_dict['name']] = cat_dict['foods']
         app.logger.info(f'Found foods for {meal} at {dh}')
     except:
-        return redirect(url_for('missing_data'), f'Foods for {meal} at {dh} Dinig Hall')
+        return redirect(url_for('missing_data'), data=f'Foods for {meal} at {dh} Dining Hall')
     return render_template('rate/select.html', dh=dh, meal=meal, food_items = food)
 
 @app.route('/rate/rating/<dh>/<meal>/<food>')
