@@ -8,7 +8,7 @@ spec:
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
-      # Shut down the job after 20 minutes run time. Failed job history is
+      # Shut down the job after 15 minutes run time. Failed job history is
       # set to 1 by default.
       activeDeadlineSeconds: 1200
       template:
