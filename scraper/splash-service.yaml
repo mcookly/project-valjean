@@ -10,5 +10,3 @@ spec:
       port: 8050
       targetPort: 8050
   type: LoadBalancer
-status:
-  loadBalancer: {}

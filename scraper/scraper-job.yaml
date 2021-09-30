@@ -4,7 +4,7 @@ metadata:
   name: scraper-cron
 spec:
   # Should run every day at 2 AM Eastern time (6 AM UTC).
-  schedule: 0 6 * * *
+  schedule: "0 6 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -30,12 +30,17 @@ spec:
                   value: "5"
                 - name: SPLASH_TIMEOUT
                   value: "300"
-              resources: {}
+              resources:
+                requests:
+                  memory: "1Gi"
+                  cpu: "250m"
+                limits:
+                  memory: "2Gi"
+                  cpu: "500m"
           volumes:
           - name: secret
             secret:
               secretName: firebase-io
           restartPolicy: Never
-          # imagePullPolicy: Always
           imagePullSecrets:
                 - name: gar-io
