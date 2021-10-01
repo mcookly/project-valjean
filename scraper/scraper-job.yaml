@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
               # TODO: change image to officially from artifact registry
-            - image: us-central1-docker.pkg.dev/project-valjean/scraper/scraper:v0.9.3
+            - image: us-central1-docker.pkg.dev/project-valjean/scraper/scraper:v0.9.5
               name: scraper
               volumeMounts:
                 - name: secret
@@ -31,13 +31,12 @@ spec:
                 - name: SPLASH_TIMEOUT
                   value: "300"
                 - name: LOG_LEVEL
-                  value: "DEBUG"
+                  value: "INFO"
               resources: {}
           volumes:
           - name: secret
             secret:
               secretName: firebase-io
           restartPolicy: Never
-          # imagePullPolicy: Always
           imagePullSecrets:
                 - name: gar-io
