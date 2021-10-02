@@ -9,12 +9,11 @@ import logging
 
 class FoodCrawlerPipeline:
     def __init__(self):
-        # Display target DNS for Splash
-        logging.info('Using "' + os.environ.get('SPLASH_IP') + '" for Splash IP.')
+        self.logger = logging.getLogger(__name__)
         # This loads the Firebase credentials from the env
         cred = credentials.ApplicationDefault()
         firebase_admin.initialize_app(cred)
-        logging.info("Opened Firebase session successfully")
+        self.logger.info("Opened Firebase session successfully")
 
     def open_spider(self, spider):
         self.date = date.today()
@@ -27,27 +26,27 @@ class FoodCrawlerPipeline:
     def close_spider(self, spider):
         # Delete any old categories from the previous day
         def clean_db(collection):
-            logging.info(f"Cleaning {collection.id}...")
+            self.logger.info(f"Cleaning {collection.id}...")
             yesterday = str(self.date - timedelta(days=1))
             old_cats = collection.where('date', '==', yesterday).stream()
             for old_cat in old_cats:
                 old_cat.reference.delete()
-            logging.info(f"Cleaned {collection.id}")
+            self.logger.info(f"Cleaned {collection.id}")
 
         def update_meals(meals, collection, name):
-            logging.info(f"Updating meals for {collection.id}...")
+            self.logger.info(f"Updating meals for {collection.id}...")
             collection.document("META-meals").set({
                 'dh': name,
                 'meals': meals
             })
-            logging.info(f"Updating {collection.id}")
+            self.logger.info(f"Updating {collection.id}")
 
         clean_db(self.north_col)
         clean_db(self.south_col)
         update_meals(self.meals_north, self.north_col, 'North')
         update_meals(self.meals_south, self.south_col, 'South')
         self.client.close()
-        logging.info("Closed Firebase session successfuly")
+        self.logger.info("Closed Firebase session successfuly")
 
     def process_item(self, item, spider):
         # Items are category collections. See items.py for more details.

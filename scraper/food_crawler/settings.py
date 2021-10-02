@@ -27,7 +27,8 @@ USER_AGENT = 'Project Valjean (https://projectvaljean.com)'
 ROBOTSTXT_OBEY = False # Because ND does not have one on their nutrition page.
 
 # Log level (change as needed)
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = os.environ.get('LOG_LEVEL')
+LOG_FORMAT = '[%(asctime)s] %(name)s - %(levelname)s : %(message)s'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # NOTE: Must be kept at one for Scrapy-Splash to function properly.
