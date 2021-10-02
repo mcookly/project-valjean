@@ -3,8 +3,8 @@ kind: CronJob
 metadata:
   name: splash-cron
 spec:
-  # Should run every day at 01:50 Eastern time (05:50 UTC).
-  schedule: "50 5 * * *"
+  # Should run every day at 01:55 Eastern time (05:55 UTC).
+  schedule: "55 5 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
