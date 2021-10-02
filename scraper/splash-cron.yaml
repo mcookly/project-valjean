@@ -1,0 +1,32 @@
+apiVersion: batch/v1beta1 # Needs to be beta for GCP
+kind: CronJob
+metadata:
+  name: splash-cron
+spec:
+  # Should run every day at 01:55 Eastern time (05:55 UTC).
+  schedule: "55 5 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      # Shut down the job after 15 minutes run time. Failed job history is
+      # set to 1 by default.
+      activeDeadlineSeconds: 1200
+      template:
+        metadata:
+          labels:
+            app: splash-service
+        spec:
+          containers:
+            - image: scrapinghub/splash
+              name: splash
+              ports:
+                - containerPort: 8050
+              command: ["python3", "/app/bin/splash", "--max-timeout", "3600", "--proxy-profiles-path", "/etc/splash/proxy-profiles", "--js-profiles-path", "/etc/splash/js-profiles", "--filters-path", "/etc/splash/filters", "--lua-package-path", "/etc/splash/lua_modules/?.lua"]
+              resources:
+                requests:
+                  memory: "1Gi"
+                  cpu: "250m"
+                limits:
+                  memory: "2Gi"
+                  cpu: "500m"
+          restartPolicy: OnFailure
