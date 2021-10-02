@@ -141,10 +141,12 @@ class DHSPIDER(scrapy.Spider):
                 # Prep and send item to pipeline  
                 if cat_name[0] == '*':
                     cat_name = cat_name[1:-1] # Trims '*' from category
+                cat_name = cat_name.replace('/', '-')
+                # Firebase does not allow for '/' in document IDs
                 cat_item['name'] = cat_name
                 cat_item['meal'] = meal
-                cat_item["dining_hall"] = response.meta.get('dh')
-                cat_item["foods"] = foods
+                cat_item['dining_hall'] = response.meta.get('dh')
+                cat_item['foods'] = foods
                 yield cat_item
                   
                 # Prep for next loop

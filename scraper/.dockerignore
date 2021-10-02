@@ -1,6 +1,11 @@
 # Ignore the following
-.git
-.cache
+*.git
+*.cache
 .vscode
 .venv
-.yaml
+*.yaml
+
+# Python
+*.pyc
+**/__pycache__
+old_files
