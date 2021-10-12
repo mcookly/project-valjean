@@ -43,7 +43,14 @@
         // Toggle categories
         $("legend[class='big-legend']").on("click", function (e) {
             let cat = $(this).attr('id');
+            let legendText = "&nbsp;&nbsp;" + cat.substring(0, cat.length - 3);
+            let arrow = $("div[id='form-" + cat + "']").is(":visible") ? "&#9662;" : "&#9663;";
+
             $("div[id='form-" + cat + "']").toggle();
+            // "empty" the arrow just for a nice visual touch when menu is 
+            // dropped.
+            legendText = legendText + " " + arrow;
+            $(this).html(legendText).text();
         });
     });
 </script>
