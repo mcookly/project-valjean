@@ -1,3 +1,6 @@
+:root {
+    --roundness: 20px;
+}
 a {
     color: var(--mdb-secondary);
 }
@@ -8,6 +11,11 @@ a {
     width: 20%;
     height: auto;
     min-width: 110px;
+}
+/* Adjust text color on navbar buttons. There
+may be a more efficient way to do this. */
+.btn-nav-active {
+    color: var(--mdb-secondary);
 }
 /* Stretch body to full viewport */
 .full-vertical {
@@ -23,14 +31,14 @@ form {
     max-width: 700px;
 }
 .location-form {
-    border-radius: 10px;
+    border-radius: var(--roundness);
     padding: 10px 0px 10px 0px;
     margin-bottom: 20px;
     width: 100%;
     align-items: center;
 }
 .rate-form {
-    border-radius: 10px;
+    border-radius: var(--roundness);
     margin-bottom: 20px;
     width: 100%;
     overflow: hidden;
@@ -40,10 +48,15 @@ form {
 }
 /* Stylize form legends */
 .big-legend {
+    width: inherit;
     display: inline-block;
     text-align: center;
+    margin: 0;
+    padding: 10px 0px 10px 0px;
     background-color: var(--mdb-secondary);
     color: white;
+    cursor: pointer;
+    user-select: none;
 }
 /* Fix input scaling */
 input {

@@ -91,7 +91,8 @@ def selector_meal(dh, meal):
 @app.route('/session/<dh>/<meal>/food-items', methods=['POST'])
 def record_food_items(dh, meal):
     food = request.form.to_dict(flat=False) # Gives food items per category
-    food_str = json.dumps(food)
+    food_str = json.dumps(food, separators=(',', ':'))
+    # Using separators shortens the url by a LOT!
     return redirect(url_for('rating', dh=dh, meal=meal, food=food_str))
 
 ########### Writes ratings to DB

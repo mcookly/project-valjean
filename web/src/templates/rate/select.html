@@ -3,11 +3,32 @@
 {% block content %}
 <script>
     $(document).ready(function() {
-        $(".btn-check").on("click", function (e) {
+        // Toggle food buttons
+        $("input[class='btn-check']").on("click", function (e) {
             $(this).toggleClass("checked");
 
+            // This is to keep track of selected items. It feels clunky,
+            // so I'm leaving it out for now.
+            // -----
+            // par_selected = 'p[id="selected-' + $(this).attr('name') + 'Cat"]';
+            // count = parseInt($(par_selected).attr('count'));
+            // if ( $(this).hasClass("checked") ) {
+            //     count += 1;
+            // } else {
+            //     count -= 1;
+            // }
+            // $(par_selected).attr("count", count);
+            // $(par_selected).text(count + ' selected');
+            // if ( count > 0 ) {
+            //     $(par_selected).show();
+            // } else {
+            //     $(par_selected).hide();
+            // }
+            // <p style="font-style: italic; margin-bottom: 0px; opacity: 0.5; display: none;" id="selected-{{ cat }}Cat" count="0">0 selected</p>
+
             let numChecked = 0;
-            $(".btn-check").each(function() {
+            $("input[class*='btn-check']").each(function() {
+                // Not sure why the contains (*) selector is needed here.
                 if ($(this).hasClass("checked")) {
                     numChecked += 1;
                 }
@@ -19,13 +40,25 @@
                 $(".btn[type='submit']").attr("disabled", false);
             }
         });
+        // Toggle categories
+        $("legend[class='big-legend']").on("click", function (e) {
+            let cat = $(this).attr('id');
+            let legendText = "&nbsp;&nbsp;" + cat.substring(0, cat.length - 3);
+            let arrow = $("div[id='form-" + cat + "']").is(":visible") ? "&#9662;" : "&#9663;";
+
+            $("div[id='form-" + cat + "']").toggle();
+            // "empty" the arrow just for a nice visual touch when menu is 
+            // dropped.
+            legendText = legendText + " " + arrow;
+            $(this).html(legendText).text();
+        });
     });
 </script>
 <form action="{{ url_for('record_food_items', dh=dh, meal=meal) }}" style="width: 100%;" method="POST">
     {% for cat in food_items.keys() %}
         <div class="flex-row rate-form shadow">
-            <legend class="big-legend" for="{{ cat }}Cat">{{ cat }}</legend>
-            <div class="form-padding">
+            <legend id="{{ cat }}Cat" style="margin-bottom: 0px;" class="big-legend" for="{{ cat }}Cat">&nbsp;&nbsp;{{ cat }} &#9662;</legend>
+            <div id="form-{{ cat }}Cat" class="form-padding" style="padding-top: 25px; display: none;">
                 {% for food_item in food_items[cat] %}
                 <div class="form-check-inline">
                     <!-- name = dict key, value = dict value -->
