@@ -4,13 +4,13 @@
         <div class="container-fluid">
           <ul class="navbar nav">
             <li class="nav-item">
-              <a class="btn {% if active_page == 'Rate' %} btn-light {% else %} btn-outline-light {% endif %} btn-rounded mx-2" href="{{ url_for('dininghall') }}">Rate</a>
+              <a class="btn {% if active_page == 'Rate' %} btn-light btn-nav-active {% else %} btn-outline-light {% endif %} btn-rounded mx-2" href="{{ url_for('dininghall') }}">Rate</a>
             </li>
             <li class="nav-item">
-              <a class="btn {% if active_page == 'Stats' %} btn-light {% else %} btn-outline-light {% endif %} btn-rounded mx-2" href="{{ url_for('stats') }}">Stats</a>
+              <a class="btn {% if active_page == 'Stats' %} btn-light btn-nav-active {% else %} btn-outline-light {% endif %} btn-rounded mx-2" href="{{ url_for('stats') }}">Stats</a>
             </li>
             <li class="nav-item">
-              <a class="btn {% if active_page == 'About' %} btn-light {% else %} btn-outline-light {% endif %} btn-rounded mx-2" href="{{ url_for('about') }}">About</a>
+              <a class="btn {% if active_page == 'About' %} btn-light btn-nav-active {% else %} btn-outline-light {% endif %} btn-rounded mx-2" href="{{ url_for('about') }}">About</a>
             </li>
           </ul>
         </div>

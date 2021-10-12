@@ -12,6 +12,11 @@ a {
     height: auto;
     min-width: 110px;
 }
+/* Adjust text color on navbar buttons. There
+may be a more efficient way to do this. */
+.btn-nav-active {
+    color: var(--mdb-secondary);
+}
 /* Stretch body to full viewport */
 .full-vertical {
     height: 100vh;
