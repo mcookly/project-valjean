@@ -45,7 +45,7 @@ Actually configuring the two pods to run on GCP presented the most significant c
 - ✅ Get the scraper on GCP
 - ✅ Have the website read and write to DB
 - ❌ Make the statistics page
-- ❌ Clean code and add better logging and error-prevention
+- ✅ Clean code and add better logging and error-prevention
 
 ### Screenshots (iPhone X)
 #### Home

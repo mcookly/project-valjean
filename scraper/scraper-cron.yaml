@@ -14,8 +14,8 @@ spec:
             app: scraper
         spec:
           containers:
-              # TODO: change image to officially from artifact registry
-            - image: us-central1-docker.pkg.dev/project-valjean/scraper/scraper:v0.9.5
+              # Keep to latest version
+            - image: us-central1-docker.pkg.dev/project-valjean/scraper/scraper:v0.9.6
               name: scraper
               volumeMounts:
                 - name: secret
