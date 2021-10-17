@@ -19,6 +19,6 @@ RUN pip install -r requirements.txt
 COPY food_crawler/ ./food_crawler
 
 # Run both SDH and NDH spiders
-CMD ["scrapy", "crawl", "dining_halls"]
+CMD ["python3", "food_crawler/crawl.py"]
 
 # NOTE: make sure to name the image 'scraper'
