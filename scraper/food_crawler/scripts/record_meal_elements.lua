@@ -2,9 +2,10 @@
 function click_button(splash, sel)
     splash.images_enabled = false -- This may be redundant
     btn = splash:select(sel)
-    if not btn then
-        assert(splash:wait(splash.args.wait*2)) -- Wait a little longer...
+    while not btn and attempt <= 3 do
+        assert(splash:wait(splash.args.wait*2))
         btn = splash:select(sel)
+        attempt = attempt + 1
     end
     btn:mouse_click()
     assert(splash:wait(splash.args.wait))
