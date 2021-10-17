@@ -15,7 +15,7 @@ runner = CrawlerRunner(get_project_settings())
 @defer.inlineCallbacks
 def crawl():
     yield runner.crawl('North')
-    yield runner.crawl('dining_halls')
+    yield runner.crawl('South')
     reactor.stop()
 
 # Execute

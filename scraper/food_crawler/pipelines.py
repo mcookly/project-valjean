@@ -12,7 +12,11 @@ class FoodCrawlerPipeline:
         self.logger = logging.getLogger(__name__)
         # This loads the Firebase credentials from the env
         cred = credentials.ApplicationDefault()
-        firebase_admin.initialize_app(cred)
+        try:
+            firebase_admin.initialize_app(cred)
+        except ValueError:
+            # If Firebase is already initialized, then move on.
+            pass
         self.logger.info("Opened Firebase session successfully")
 
     def open_spider(self, spider):
