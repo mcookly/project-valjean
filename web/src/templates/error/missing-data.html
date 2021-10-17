@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% set active_page = "Error" %}
 {% block content %}
-<script>
+<!-- <script>
     var time = 5;
     var x = setInterval(function() {
         document.getElementById("countdown").innerHTML = time;
@@ -11,10 +11,11 @@
             window.location.href = "{{ url_for('index') }}";
         }
     }, 1000);
-</script>
+</script> -->
 <div class="text-center">
     <h1>oops!</h1>
-    <p>Unable to find or process <b>{{ data }}</b>. Redirecting you to Home in...</p>
-    <h1 id="countdown"></h1>
+    <p>Unable to find or process <b>{{ data }}</b>. Would you like to <a href="https://docs.google.com/forms/d/e/1FAIpQLSfkia_lQ5ZT0wl0PGfEzXqD7iymzLES1wkS923qzwOZOHfheA/viewform?usp=sf_link">report a bug</a>?</p>
+    <a class="btn btn-lg btn-secondary btn-rounded" href="{{ url_for('index') }}">Home</a>
+    <!-- <h1 id="countdown"></h1> -->
 </div>
 {% endblock %}
