@@ -12,16 +12,18 @@ class FoodCrawlerPipeline:
         self.logger = logging.getLogger(__name__)
         # This loads the Firebase credentials from the env
         cred = credentials.ApplicationDefault()
-        firebase_admin.initialize_app(cred)
+        try:
+            firebase_admin.initialize_app(cred)
+        except ValueError:
+            # If Firebase is already initialized, then move on.
+            pass
         self.logger.info("Opened Firebase session successfully")
 
     def open_spider(self, spider):
         self.date = date.today()
         self.client = firestore.client()
-        self.north_col = self.client.collection('foods-North')
-        self.south_col = self.client.collection('foods-South')
-        self.meals_north = list()
-        self.meals_south = list()
+        self.col = self.client.collection(f'foods-{spider.name}')
+        self.meals = list()
 
     def close_spider(self, spider):
         # Delete any old categories from the previous day
@@ -41,28 +43,20 @@ class FoodCrawlerPipeline:
             })
             self.logger.info(f"Updating {collection.id}")
 
-        clean_db(self.north_col)
-        clean_db(self.south_col)
-        update_meals(self.meals_north, self.north_col, 'North')
-        update_meals(self.meals_south, self.south_col, 'South')
+        clean_db(self.col)
+        update_meals(self.meals, self.col, spider.name)
         self.client.close()
         self.logger.info("Closed Firebase session successfuly")
 
     def process_item(self, item, spider):
         # Items are category collections. See items.py for more details.
         item_dh = item['dining_hall']
-        if item_dh == 'North':
-            dh_col = self.north_col
-            meals_list = self.meals_north
-        elif item_dh == 'South':
-            dh_col = self.south_col
-            meals_list = self.meals_south
 
         # Keep track of meals for each dining hall to read on the web app.
-        if item['meal'] not in meals_list:
-            meals_list.append(item['meal'])
+        if item['meal'] not in self.meals:
+            self.meals.append(item['meal'])
         
-        dh_col.document(item['meal'] + '-' + item['name']).set({
+        self.col.document(item['meal'] + '-' + item['name']).set({
             'name': item['name'],
             'foods': item['foods'],
             'date': str(self.date),
