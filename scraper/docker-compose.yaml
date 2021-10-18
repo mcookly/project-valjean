@@ -1,13 +1,20 @@
+# For local dev
 version: "3"
 services:
     splash:
-        image: scrapinghub/splash
+        image: scrapinghub/splash:3.5
         container_name: splash
         ports:
             - "8050:8050"
-        labels:
-            kompose.service.type: loadbalancer
     scraper:
         image: scraper
         container_name: scraper
-        restart: on-failure
+        environment:
+            # Make sure to set GOOGLE_APPLICATION_CREDENTIALS on run
+            - SPLASH_IP=splash:8050
+            - SPIDER_WAIT_TIME=1
+            - SPLASH_TIMEOUT=90
+            - LOG_LEVEL=DEBUG
+            - GOOGLE_APPLICATION_CREDENTIALS=/etc/secret/firebase-io.json
+        volumes:
+            - ${PROJECT_PATH}/firebase-io.json:/etc/secret/firebase-io.json:ro
